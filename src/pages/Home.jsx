@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, ArrowRight, Library, Users, CreditCard, MonitorSmartphone, TrendingUp, BarChart3, Clock, Sparkles, ChevronDown } from 'lucide-react';
+import { Check, ArrowRight, Library, Users, CreditCard, MonitorSmartphone, TrendingUp, BarChart3, Clock, Sparkles, ChevronDown, X, Building2, User, Mail, Lock, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
 import { siteConfig } from '../config/site';
 import { productAssets } from '../config/productAssets';
 import PlaceholderScreenshot from '../components/ui/PlaceholderScreenshot';
@@ -112,6 +112,40 @@ export default function Home() {
   const [showSolutionToggle, setShowSolutionToggle] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [hoveredProblem, setHoveredProblem] = useState(null);
+
+  // Self-Service Onboarding Modal State
+  const [isRegistrationOpen, setIsRegistrationOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState('Free Plan');
+  const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    libraryName: '',
+    slug: '',
+    password: '',
+    confirmPassword: ''
+  });
+
+  const openRegistrationModal = (planName = 'Free Plan') => {
+    setSelectedPlan(planName);
+    setRegistrationSuccess(false);
+    setIsRegistrationOpen(true);
+  };
+
+  const handleLibraryNameChange = (e) => {
+    const val = e.target.value;
+    const autoSlug = val.toLowerCase().replace(/[^a-z0-9]/g, '');
+    setFormData(prev => ({
+      ...prev,
+      libraryName: val,
+      slug: autoSlug
+    }));
+  };
+
+  const handleRegisterSubmit = (e) => {
+    e.preventDefault();
+    setRegistrationSuccess(true);
+  };
   
   const trustItems = ['Student Management', 'Live Attendance', 'Seat Management', 'Fee Tracking', 'Student Portal', 'Library Growth', 'Revenue Analytics'];
   const features = [
@@ -911,7 +945,7 @@ export default function Home() {
       </section>
 
       {/* 11. PRICING */}
-      <section id="pricing" className="py-24 bg-white">
+      <section id="pricing" className="py-24 bg-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading 
             title="Simple, affordable pricing" 
@@ -923,32 +957,80 @@ export default function Home() {
               <motion.div 
                 key={i} 
                 whileHover={{ y: -6 }}
-                className={`rounded-2xl p-8 border relative transition-all duration-300 ${
+                className={`rounded-3xl p-8 border relative transition-all duration-300 flex flex-col justify-between ${
                   plan.recommended 
-                    ? 'border-brand-500 border-t-4 border-t-brand-600 shadow-xl shadow-brand-500/15 bg-gradient-to-b from-brand-50/40 via-white to-white' 
-                    : 'border-slate-200 border-t-4 border-t-slate-400 shadow-sm bg-white hover:border-slate-300 hover:shadow-lg'
+                    ? 'border-brand-500 border-2 shadow-2xl shadow-brand-500/20 bg-gradient-to-b from-brand-50/60 via-white to-white ring-4 ring-brand-500/10' 
+                    : 'border-slate-200 border-2 shadow-lg bg-white hover:border-slate-300'
                 }`}
               >
                 {plan.recommended && (
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand-600 to-indigo-600 text-white px-4 py-1 rounded-full text-[11px] font-extrabold tracking-wider uppercase shadow-md z-20">
-                    MOST POPULAR
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600 text-white px-4 py-1 rounded-full text-[11px] font-black tracking-wider uppercase shadow-md z-20 flex items-center gap-1">
+                    <Sparkles size={13} /> MOST POPULAR
                   </div>
                 )}
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">{plan.name}</h3>
-                <p className="text-slate-500 font-medium mb-6 pb-6 border-b border-slate-100">{plan.students}</p>
-                <div className="mb-8">
-                  <span className="text-5xl font-extrabold text-slate-900">{plan.price}</span>
-                  <span className="text-slate-500 font-medium ml-1">{plan.period}</span>
+
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="text-2xl font-bold text-slate-900">{plan.name}</h3>
+                    {plan.recommended ? (
+                      <span className="p-2 rounded-xl bg-brand-100 text-brand-600"><Sparkles size={20}/></span>
+                    ) : (
+                      <span className="p-2 rounded-xl bg-emerald-100 text-emerald-600"><Zap size={20}/></span>
+                    )}
+                  </div>
+                  
+                  <p className="text-slate-500 text-xs font-medium mb-4">{plan.subtitle || plan.students}</p>
+                  
+                  <div className="mb-4 pb-6 border-b border-slate-100">
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-5xl font-extrabold text-slate-900">{plan.price}</span>
+                      <span className="text-slate-500 font-bold text-sm">{plan.period}</span>
+                    </div>
+                    {plan.savings && (
+                      <div className="mt-2 text-xs font-extrabold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-md inline-block">
+                        ✓ {plan.savings}
+                      </div>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => openRegistrationModal(plan.name)}
+                    className={`w-full py-3.5 px-6 rounded-xl font-extrabold transition-all duration-200 shadow-md mb-8 cursor-pointer flex items-center justify-center gap-2 ${
+                      plan.recommended 
+                        ? 'bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600 text-white hover:opacity-95 shadow-brand-600/30 hover:-translate-y-0.5' 
+                        : 'bg-slate-900 text-white hover:bg-slate-800 hover:shadow-lg'
+                    }`}
+                  >
+                    <span>{plan.ctaText || (plan.recommended ? "Start 1-Month Free Trial" : "Get Started Free")}</span>
+                    <ArrowRight size={18} />
+                  </button>
+
+                  <div className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-4">
+                    {plan.recommended ? "Everything in Free, plus:" : "Features Included:"}
+                  </div>
+
+                  <ul className="space-y-3 mb-6">
+                    {plan.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs md:text-sm">
+                        <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 ${
+                          plan.recommended ? 'bg-brand-100 text-brand-600' : 'bg-emerald-100 text-emerald-600'
+                        }`}>
+                          <Check size={13} strokeWidth={3} />
+                        </div>
+                        <span className="text-slate-700 font-semibold">{feature}</span>
+                      </li>
+                    ))}
+
+                    {plan.disabledFeatures && plan.disabledFeatures.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs md:text-sm opacity-40">
+                        <div className="w-5 h-5 rounded-full bg-slate-100 text-slate-400 flex items-center justify-center shrink-0 mt-0.5">
+                          <X size={13} strokeWidth={2.5} />
+                        </div>
+                        <span className="text-slate-500 font-normal line-through">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-start gap-3">
-                      <Check size={20} className={plan.recommended ? "text-brand-600 flex-shrink-0" : "text-slate-500 flex-shrink-0"} />
-                      <span className="text-slate-700 font-medium">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <DemoCTAButton primary={plan.recommended} className="w-full py-3 shadow-md" />
               </motion.div>
             ))}
           </div>
@@ -970,7 +1052,91 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 12. FAQ */}
+      {/* 12. SAVINGS & ROI COMPARISON SECTION (Manual vs StudyDesk) */}
+      <section className="py-24 bg-slate-900 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <SectionHeading 
+            title="Manual Registers vs. StudyDesk Platform" 
+            subtitle="See how much time, money, and hassle your library saves every single month."
+          />
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-12">
+            {/* Savings & ROI Highlights (4 Cols) */}
+            <div className="lg:col-span-4 bg-gradient-to-br from-slate-800 via-slate-800 to-slate-950 p-8 rounded-3xl border border-slate-700 flex flex-col justify-between shadow-2xl">
+              <div>
+                <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider inline-block mb-6">
+                  💰 Verified ROI
+                </span>
+                <h3 className="text-3xl font-extrabold text-white mb-4">Save up to ₹1.2 Lakh / year</h3>
+                <p className="text-slate-300 text-sm leading-relaxed mb-6">
+                  Paper registers lead to unpaid fee leaks, manual attendance errors, and high receptionist costs. StudyDesk automates operations so 1 owner can manage 300+ students effortlessly.
+                </p>
+
+                <div className="space-y-3 border-t border-slate-700/80 pt-6 mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">✓</div>
+                    <span className="text-sm font-semibold text-slate-200">Zero Uncollected Fee Leaks</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">✓</div>
+                    <span className="text-sm font-semibold text-slate-200">Branded Public Library Webpage</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">✓</div>
+                    <span className="text-sm font-semibold text-slate-200">Dedicated Student & Parent Portal</span>
+                  </div>
+                </div>
+              </div>
+
+              <button 
+                onClick={() => openRegistrationModal('Free Plan')}
+                className="w-full py-4 rounded-xl font-bold bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white shadow-xl shadow-brand-600/30 text-center transition-all cursor-pointer"
+              >
+                Start Saving Today — Free Trial →
+              </button>
+            </div>
+
+            {/* Comparison Table (8 Cols) */}
+            <div className="lg:col-span-8 bg-slate-800/60 border border-slate-700/80 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-md">
+              <div className="grid grid-cols-12 bg-slate-800 p-4 border-b border-slate-700 text-xs md:text-sm font-extrabold text-slate-300 uppercase tracking-wider">
+                <div className="col-span-5">Operational Factor</div>
+                <div className="col-span-3 text-rose-400">Old Manual Register</div>
+                <div className="col-span-4 text-emerald-400 flex items-center gap-1.5">
+                  <Sparkles size={16} /> StudyDesk Platform
+                </div>
+              </div>
+
+              {[
+                { factor: 'Monthly Staff Salary', old: '₹8,000 - ₹12,000/mo', new: '₹0 (Self-Service PIN Kiosk)' },
+                { factor: 'Attendance & Entry Logs', old: 'Manual paper registers (human errors)', new: '100% Digital PIN Check-in' },
+                { factor: 'Unpaid Fee Reminders', old: 'Forgotten or uncomfortable calls', new: 'Automated Email & WhatsApp' },
+                { factor: 'Public Online Presence', old: 'None (No web page for business)', new: 'Branded Public Library Page' },
+                { factor: 'Student & Parent Access', old: 'Paper slips & frequent calls', new: '24/7 Digital Student Portal' },
+                { factor: 'Seat Capacity & Occupancy', old: 'Guesswork & double-booking', new: 'Live Real-time Seat Map' },
+                { factor: 'Multi-Branch Management', old: 'Impossible without physical visit', new: '1-Click Centralized Admin' },
+              ].map((row, idx) => (
+                <div 
+                  key={idx} 
+                  className={`grid grid-cols-12 p-4 text-xs md:text-sm items-center border-b border-slate-700/50 transition-colors ${
+                    idx % 2 === 0 ? 'bg-slate-900/40' : 'bg-slate-900/80'
+                  } hover:bg-slate-800/80`}
+                >
+                  <div className="col-span-5 font-bold text-slate-200">{row.factor}</div>
+                  <div className="col-span-3 text-slate-400 font-medium flex items-center gap-1">
+                    <span className="text-rose-400 font-bold">✕</span> {row.old}
+                  </div>
+                  <div className="col-span-4 text-emerald-400 font-bold flex items-center gap-1.5">
+                    <Check size={18} className="text-emerald-400 shrink-0" /> {row.new}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 13. FAQ */}
       <section id="faq" className="py-24 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading title="Frequently Asked Questions" />
@@ -988,7 +1154,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 13. FINAL CTA */}
+      {/* 14. FINAL CTA */}
       <section className="py-24 bg-brand-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -997,7 +1163,12 @@ export default function Home() {
             See how your library can be managed digitally — without changing the way you already work.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <DemoCTAButton primary={false} className="w-full sm:w-auto bg-white !text-brand-900 hover:bg-slate-100 hover:!text-brand-900 shadow-xl" />
+            <button
+              onClick={() => openRegistrationModal('Free Plan')}
+              className="px-8 py-4 rounded-xl font-bold bg-white text-brand-900 hover:bg-slate-100 transition-all shadow-xl text-base flex items-center justify-center gap-2 cursor-pointer"
+            >
+              Get Started Free <ArrowRight size={18} />
+            </button>
             <a 
               href={`https://wa.me/${siteConfig.contact.whatsapp}`}
               target="_blank"
@@ -1009,6 +1180,173 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* 15. SELF-SERVICE ONBOARDING & LIBRARY CREATION MODAL */}
+      <AnimatePresence>
+        {isRegistrationOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 md:p-8 text-white shadow-2xl relative my-8"
+            >
+              <button 
+                onClick={() => setIsRegistrationOpen(false)}
+                className="absolute top-5 right-5 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+
+              {!registrationSuccess ? (
+                <>
+                  <div className="mb-6">
+                    <span className="bg-brand-500/20 text-brand-400 border border-brand-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
+                      Instant 1-Month Free Trial
+                    </span>
+                    <h3 className="text-2xl font-bold text-white mb-1">Create Your Library Account</h3>
+                    <p className="text-slate-400 text-sm">No manual setup required. Selected: <span className="text-brand-400 font-semibold">{selectedPlan}</span></p>
+                  </div>
+
+                  <form onSubmit={handleRegisterSubmit} className="space-y-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Your Full Name</label>
+                      <div className="relative">
+                        <User size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                        <input 
+                          type="text"
+                          required
+                          placeholder="e.g. Rahul Sharma"
+                          value={formData.fullName}
+                          onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                          className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Email Address</label>
+                      <div className="relative">
+                        <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                        <input 
+                          type="email"
+                          required
+                          placeholder="e.g. owner@apexlibrary.com"
+                          value={formData.email}
+                          onChange={(e) => setFormData({...formData, email: e.target.value})}
+                          className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Library / Business Name</label>
+                      <div className="relative">
+                        <Building2 size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                        <input 
+                          type="text"
+                          required
+                          placeholder="e.g. Apex Study Point"
+                          value={formData.libraryName}
+                          onChange={handleLibraryNameChange}
+                          className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Your Library Slug / Web Link</label>
+                      <div className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 flex items-center gap-1 text-sm text-slate-400">
+                        <span className="text-slate-500 text-xs font-semibold">library-desk.vercel.app/l/</span>
+                        <input 
+                          type="text"
+                          required
+                          placeholder="apexstudypoint"
+                          value={formData.slug}
+                          onChange={(e) => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')})}
+                          className="bg-transparent text-emerald-400 font-bold focus:outline-none flex-1 text-sm"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Password</label>
+                        <div className="relative">
+                          <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                          <input 
+                            type="password"
+                            required
+                            placeholder="••••••••"
+                            value={formData.password}
+                            onChange={(e) => setFormData({...formData, password: e.target.value})}
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Confirm Password</label>
+                        <div className="relative">
+                          <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                          <input 
+                            type="password"
+                            required
+                            placeholder="••••••••"
+                            value={formData.confirmPassword}
+                            onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
+                            className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500"
+                          />
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full mt-2 py-3.5 rounded-xl font-bold bg-gradient-to-r from-brand-600 via-brand-500 to-indigo-600 text-white shadow-lg shadow-brand-600/30 hover:opacity-95 transition-all text-base flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                      <span>🚀 Launch My Library & Start Trial</span>
+                    </button>
+                  </form>
+                </>
+              ) : (
+                <div className="text-center py-4">
+                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-4 border border-emerald-500/30">
+                    <CheckCircle2 size={36} />
+                  </div>
+                  <h3 className="text-2xl font-bold text-white mb-2">🎉 Your Library is Ready!</h3>
+                  <p className="text-slate-300 text-sm mb-6 max-w-sm mx-auto">
+                    We have configured the 1-month trial for <span className="font-bold text-white">{formData.libraryName || 'Your Library'}</span> under the <span className="text-brand-400 font-bold">{selectedPlan}</span>.
+                  </p>
+
+                  <div className="bg-slate-950 border border-slate-800 p-4 rounded-2xl mb-6 text-left">
+                    <div className="text-xs text-slate-400 mb-1">Your Custom Library URL:</div>
+                    <div className="text-emerald-400 font-bold text-sm select-all break-all">
+                      https://library-desk.vercel.app/l/{formData.slug || 'mylibrary'}
+                    </div>
+                  </div>
+
+                  <a 
+                    href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(`Hi! I just registered my library "${formData.libraryName}" (URL: library-desk.vercel.app/l/${formData.slug}) for the 1-month free trial on ${selectedPlan}. Please activate my owner access.`)}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="block w-full py-3.5 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20 transition-all text-center mb-3"
+                  >
+                    Open Dashboard & Activate Instant Trial →
+                  </a>
+
+                  <button 
+                    onClick={() => setIsRegistrationOpen(false)}
+                    className="text-slate-400 hover:text-white text-xs font-semibold cursor-pointer"
+                  >
+                    Close Window
+                  </button>
+                </div>
+              )}
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
     </div>
   );
