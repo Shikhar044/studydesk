@@ -307,57 +307,61 @@ export default function Home() {
             }}
             className="grid grid-cols-1 md:grid-cols-3 gap-8"
           >
+            {/* MANAGE CARD */}
             <motion.div 
               variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } } }}
-              whileHover={{ y: -5 }} 
-              className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200"
+              whileHover={{ y: -6 }} 
+              className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 border-t-4 border-t-blue-500 relative overflow-hidden transition-all duration-300 hover:border-blue-300 hover:shadow-xl hover:shadow-blue-500/10"
             >
-              <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-blue-50 via-blue-50/30 to-transparent rounded-bl-full -z-0 pointer-events-none"></div>
+              <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-blue-200/50">
                 <Library size={28} />
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">MANAGE</h3>
-              <ul className="space-y-3">
+              <ul className="space-y-3 relative z-10">
                 {['Students', 'Seats', 'Shifts', 'Attendance', 'Fees'].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-slate-600">
-                    <Check size={18} className="text-brand-500" /> {item}
+                  <li key={item} className="flex items-center gap-3 text-slate-600 font-medium">
+                    <Check size={18} className="text-blue-500 flex-shrink-0" /> {item}
                   </li>
                 ))}
               </ul>
             </motion.div>
 
+            {/* SERVE CARD */}
             <motion.div 
               variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } } }}
-              whileHover={{ y: -5 }} 
-              className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 relative overflow-hidden"
+              whileHover={{ y: -6 }} 
+              className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 border-t-4 border-t-emerald-500 relative overflow-hidden transition-all duration-300 hover:border-emerald-300 hover:shadow-xl hover:shadow-emerald-500/10"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-50 rounded-bl-full -z-10"></div>
-              <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-xl flex items-center justify-center mb-6">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-emerald-50 via-emerald-50/30 to-transparent rounded-bl-full -z-0 pointer-events-none"></div>
+              <div className="w-14 h-14 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-emerald-200/50">
                 <MonitorSmartphone size={28} />
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">SERVE</h3>
-              <ul className="space-y-3">
+              <ul className="space-y-3 relative z-10">
                 {['Student Portal', 'Parent Access', 'Digital Receipts', 'Attendance History', 'Fee History'].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-slate-600">
-                    <Check size={18} className="text-brand-500" /> {item}
+                  <li key={item} className="flex items-center gap-3 text-slate-600 font-medium">
+                    <Check size={18} className="text-emerald-500 flex-shrink-0" /> {item}
                   </li>
                 ))}
               </ul>
             </motion.div>
 
+            {/* GROW CARD */}
             <motion.div 
               variants={{ hidden: { opacity: 0, y: 40 }, visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100 } } }}
-              whileHover={{ y: -5 }} 
-              className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 relative overflow-hidden"
+              whileHover={{ y: -6 }} 
+              className="bg-white rounded-2xl p-8 shadow-sm border border-slate-200 border-t-4 border-t-purple-500 relative overflow-hidden transition-all duration-300 hover:border-purple-300 hover:shadow-xl hover:shadow-purple-500/10"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-purple-50 rounded-bl-full -z-10"></div>
-              <div className="w-14 h-14 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-6">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-gradient-to-bl from-purple-50 via-purple-50/30 to-transparent rounded-bl-full -z-0 pointer-events-none"></div>
+              <div className="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-sm border border-purple-200/50">
                 <TrendingUp size={28} />
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-4 tracking-tight">GROW</h3>
-              <ul className="space-y-3">
+              <ul className="space-y-3 relative z-10">
                 {['Public Library Page', 'Online Enquiries', 'Student Referrals', 'Library Branding', 'Business Insights'].map((item) => (
-                  <li key={item} className="flex items-center gap-3 text-slate-600">
-                    <Check size={18} className="text-brand-500" /> {item}
+                  <li key={item} className="flex items-center gap-3 text-slate-600 font-medium">
+                    <Check size={18} className="text-purple-500 flex-shrink-0" /> {item}
                   </li>
                 ))}
               </ul>
@@ -442,17 +446,17 @@ export default function Home() {
           
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
             {[
-              { label: 'Students Inside', val: 'Live Count', icon: <Users size={24} />, color: 'text-blue-600', bg: 'bg-blue-100' },
-              { label: 'Available Seats', val: 'Real-time', icon: <Library size={24} />, color: 'text-emerald-600', bg: 'bg-emerald-100' },
-              { label: 'Fees Due', val: 'Automated', icon: <CreditCard size={24} />, color: 'text-rose-600', bg: 'bg-rose-100' },
-              { label: 'Revenue', val: 'Tracked', icon: <TrendingUp size={24} />, color: 'text-brand-600', bg: 'bg-brand-100' },
+              { label: 'Students Inside', val: 'Live Count', icon: <Users size={24} />, color: 'text-blue-600', bg: 'bg-blue-100', topBorder: 'border-t-blue-500 hover:border-blue-300' },
+              { label: 'Available Seats', val: 'Real-time', icon: <Library size={24} />, color: 'text-emerald-600', bg: 'bg-emerald-100', topBorder: 'border-t-emerald-500 hover:border-emerald-300' },
+              { label: 'Fees Due', val: 'Automated', icon: <CreditCard size={24} />, color: 'text-rose-600', bg: 'bg-rose-100', topBorder: 'border-t-rose-500 hover:border-rose-300' },
+              { label: 'Revenue', val: 'Tracked', icon: <TrendingUp size={24} />, color: 'text-brand-600', bg: 'bg-brand-100', topBorder: 'border-t-brand-500 hover:border-brand-300' },
             ].map((stat, i) => (
               <motion.div 
                 key={i} 
                 whileHover={{ y: -5, scale: 1.02 }}
-                className="bg-white border border-slate-200 hover:border-brand-300 hover:shadow-xl hover:shadow-brand-500/10 rounded-2xl p-6 text-center transition-all duration-300 cursor-default"
+                className={`bg-white border border-slate-200 border-t-4 ${stat.topBorder} hover:shadow-xl hover:shadow-brand-500/10 rounded-2xl p-6 text-center transition-all duration-300 cursor-default`}
               >
-                <div className={`w-12 h-12 mx-auto rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center mb-4`}>
+                <div className={`w-12 h-12 mx-auto rounded-xl ${stat.bg} ${stat.color} flex items-center justify-center mb-4 shadow-sm`}>
                   {stat.icon}
                 </div>
                 <div className="text-2xl font-bold text-slate-900 mb-1">{stat.val}</div>
@@ -671,11 +675,19 @@ export default function Home() {
             subtitle="Start with a 1 month free trial. Grow as your library grows."
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto justify-center">
             {siteConfig.pricing.map((plan, i) => (
-              <div key={i} className={`rounded-2xl p-8 border ${plan.recommended ? 'border-brand-500 shadow-xl shadow-brand-500/10 relative' : 'border-slate-200 shadow-sm'}`}>
+              <motion.div 
+                key={i} 
+                whileHover={{ y: -6 }}
+                className={`rounded-2xl p-8 border relative overflow-hidden transition-all duration-300 ${
+                  plan.recommended 
+                    ? 'border-brand-500 border-t-4 border-t-brand-600 shadow-xl shadow-brand-500/15 bg-gradient-to-b from-brand-50/40 via-white to-white' 
+                    : 'border-slate-200 border-t-4 border-t-slate-400 shadow-sm bg-white hover:border-slate-300 hover:shadow-lg'
+                }`}
+              >
                 {plan.recommended && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-brand-500 text-white px-4 py-1 rounded-full text-sm font-bold tracking-wide">
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-brand-600 to-indigo-600 text-white px-4 py-1 rounded-full text-xs font-extrabold tracking-wider uppercase shadow-md">
                     MOST POPULAR
                   </div>
                 )}
@@ -683,23 +695,34 @@ export default function Home() {
                 <p className="text-slate-500 font-medium mb-6 pb-6 border-b border-slate-100">{plan.students}</p>
                 <div className="mb-8">
                   <span className="text-5xl font-extrabold text-slate-900">{plan.price}</span>
-                  <span className="text-slate-500 font-medium">{plan.period}</span>
+                  <span className="text-slate-500 font-medium ml-1">{plan.period}</span>
                 </div>
                 <ul className="space-y-4 mb-8">
                   {plan.features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-3">
-                      <Check size={20} className="text-brand-500 flex-shrink-0" />
-                      <span className="text-slate-700">{feature}</span>
+                      <Check size={20} className={plan.recommended ? "text-brand-600 flex-shrink-0" : "text-slate-500 flex-shrink-0"} />
+                      <span className="text-slate-700 font-medium">{feature}</span>
                     </li>
                   ))}
                 </ul>
-                <DemoCTAButton primary={plan.recommended} className="w-full py-3" />
-              </div>
+                <DemoCTAButton primary={plan.recommended} className="w-full py-3 shadow-md" />
+              </motion.div>
             ))}
           </div>
           
-          <div className="text-center mt-12">
-            <p className="text-slate-600 font-medium">Need more than 150 students? <a href={`https://wa.me/${siteConfig.contact.whatsapp}`} className="text-brand-600 underline">Talk to us</a></p>
+          {/* Custom Enterprise Banner */}
+          <div className="mt-12 text-center max-w-2xl mx-auto bg-slate-50 border border-slate-200/80 rounded-2xl p-6 shadow-sm">
+            <p className="text-slate-700 font-medium text-base mb-2">
+              Have multiple branches or custom infrastructure requirements?
+            </p>
+            <a 
+              href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent("Hi, I have custom multi-branch or enterprise requirements for my library.")}`} 
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-700 underline transition-colors"
+            >
+              Talk to us on WhatsApp <ArrowRight size={16} />
+            </a>
           </div>
         </div>
       </section>
