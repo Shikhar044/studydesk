@@ -14,31 +14,36 @@ export const siteConfig = {
   pricing: [
     {
       name: "Free Plan",
-      students: "Up to 50 students",
+      students: "For small libraries (up to 50 students)",
       price: "₹0",
       period: "forever free",
       features: [
+        "Up to 50 active students",
+        "Full seat & shift management",
         "Terminal 4-digit PIN check-in",
-        "Basic seat management",
-        "Live attendance tracking",
+        "Live attendance & seat map",
+        "Student & Parent mobile portal",
+        "Automated email & manual WhatsApp fee reminders",
         "1 admin account",
-        "Student & Parent portal",
-        "Standard email support"
+        "Standard support"
       ],
       recommended: false
     },
     {
       name: "Premium Plan",
-      students: "Unlimited students",
+      students: "For growing & multi-branch libraries",
       price: "₹499",
       period: "/year",
       features: [
-        "Everything in Free, plus:",
-        "Unlimited branches & admins",
-        "Automated WhatsApp reminders",
-        "Invoice generation & fee tracking",
-        "Advanced Analytics & AI Insights",
-        "Priority 24/7 Phone Support"
+        "UNLIMITED active students",
+        "Unlimited branch management",
+        "Full seat & shift management",
+        "Terminal 4-digit PIN check-in",
+        "Live attendance & seat map",
+        "Student & Parent mobile portal",
+        "Automated email & manual WhatsApp fee reminders",
+        "Multiple admin & staff accounts",
+        "Priority 24/7 Phone & WhatsApp support"
       ],
       recommended: true
     }

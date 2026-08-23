@@ -815,10 +815,10 @@ export default function Home() {
                   <div className="w-full md:w-1/2">
                     <span className="text-xs font-extrabold uppercase tracking-widest text-amber-600 bg-amber-50 px-3 py-1 rounded-full mb-3 inline-block">Step 3 Live Preview</span>
                     <h3 className="text-2xl font-bold text-slate-900 mb-3">Automatic daily operations</h3>
-                    <p className="text-slate-600 text-sm mb-6 leading-relaxed">Students scan or check in at entry. Seat map updates live, and automated WhatsApp payment reminders send when fees are due.</p>
+                    <p className="text-slate-600 text-sm mb-6 leading-relaxed">Students check in at entry. Seat map updates live, and automated email & 1-click WhatsApp payment reminders send when fees are due.</p>
                     <div className="space-y-2 text-sm font-medium">
                       <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Real-time Seat Occupancy</div>
-                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Automated WhatsApp Due Reminders</div>
+                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Automated Email & WhatsApp Reminders</div>
                     </div>
                   </div>
                   <div className="w-full md:w-1/2 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-inner">
