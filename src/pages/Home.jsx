@@ -109,6 +109,9 @@ const DemoCTAButton = ({ primary = true, className = '' }) => (
 export default function Home() {
   const [activeFeature, setActiveFeature] = useState(0);
   const [activeFaq, setActiveFaq] = useState(0);
+  const [showSolutionToggle, setShowSolutionToggle] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [hoveredProblem, setHoveredProblem] = useState(null);
   
   const trustItems = ['Student Management', 'Live Attendance', 'Seat Management', 'Fee Tracking', 'Student Portal', 'Library Growth', 'Revenue Analytics'];
   const features = [
@@ -149,7 +152,7 @@ export default function Home() {
   const faqs = [
     { q: "What is this software?", a: "It's a complete SaaS platform designed specifically for study libraries and reading rooms to manage students, attendance, seats, and fees." },
     { q: "Is it suitable for small libraries?", a: "Yes, it is designed to be affordable and simple for small to medium libraries starting from 30 students up to 300+ students." },
-    { q: "Do I need special hardware?", a: "No special hardware is required. You can run the dashboard on any laptop, tablet, or smartphone. Students can scan QR codes or use the terminal." },
+    { q: "Do I need special hardware?", a: "No special hardware is required. You can run the dashboard on any laptop, tablet, or smartphone. Students easily check in at the desk using their 4-digit PIN on the terminal mode." },
     { q: "Can students access their attendance and fee information?", a: "Yes, every student gets access to a dedicated digital portal to view their own attendance, fees, receipts, and study hours." },
     { q: "Can parents access student information?", a: "Yes, parents can log in securely to check their child's attendance and fee status without having to call you." },
     { q: "How does the free trial work?", a: "You get 1 month of full access to try the software with your real library operations. We help you set it up completely free." },
@@ -241,50 +244,107 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. PROBLEM SECTION */}
-      <section className="py-24 bg-white">
+      {/* 3. PROBLEM VS SOLUTION SECTION */}
+      <section className="py-24 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-3xl mx-auto mb-16"
+            className="text-center max-w-3xl mx-auto mb-12"
           >
+            <span className="bg-rose-100 text-rose-700 px-4 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-widest mb-4 inline-block shadow-sm">
+              Interactive Comparison
+            </span>
             <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6">Still managing your library like this?</h2>
+            <p className="text-lg text-slate-600 mb-8">Hover over any card below — or flip the switch to see how StudyDesk fixes it instantly.</p>
+            
+            {/* Interactive Toggle Switch */}
+            <div className="inline-flex items-center gap-3 bg-slate-100 p-2 rounded-2xl border border-slate-200 shadow-inner">
+              <button 
+                onClick={() => setShowSolutionToggle(false)}
+                className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 flex items-center gap-2 ${
+                  !showSolutionToggle 
+                    ? 'bg-rose-500 text-white shadow-md shadow-rose-500/30 scale-105' 
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span>✕</span> Old Paperwork Way
+              </button>
+              <button 
+                onClick={() => setShowSolutionToggle(true)}
+                className={`px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 flex items-center gap-2 ${
+                  showSolutionToggle 
+                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30 scale-105' 
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <Sparkles size={16} /> The StudyDesk Way
+              </button>
+            </div>
           </motion.div>
           
           <motion.div 
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.6, staggerChildren: 0.1 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16"
           >
             {[
-              "Register full of messy student entries",
-              "Manually checking fee due dates",
-              "Asking students about attendance",
-              "Forgetting empty or occupied seats",
-              "Searching through old payment records",
-              "Manually calculating monthly revenue"
-            ].map((problem, i) => (
-              <motion.div 
-                key={i} 
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="bg-slate-50 border border-slate-100 rounded-xl p-6 flex items-start gap-4"
-              >
-                <div className="w-8 h-8 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center flex-shrink-0 mt-0.5">✕</div>
-                <p className="text-slate-700 font-medium">{problem}</p>
-              </motion.div>
-            ))}
+              { problem: "Register full of messy student entries", solution: "1-Click Digital Admissions & Student Directory" },
+              { problem: "Manually checking fee due dates", solution: "Automated Fee Reminders & Due Date Tracking" },
+              { problem: "Asking students about attendance", solution: "Live Check-in/Check-out Attendance Logs" },
+              { problem: "Forgetting empty or occupied seats", solution: "Real-time Interactive Visual Seat Map" },
+              { problem: "Searching through old payment records", solution: "Digital Payment History & Auto Receipts" },
+              { problem: "Manually calculating monthly revenue", solution: "Real-Time Revenue Analytics & Financial Insights" }
+            ].map((item, i) => {
+              const isSolved = showSolutionToggle || hoveredProblem === i;
+              return (
+                <motion.div 
+                  key={i} 
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.05 }}
+                  onMouseEnter={() => setHoveredProblem(i)}
+                  onMouseLeave={() => setHoveredProblem(null)}
+                  className={`relative rounded-2xl p-6 transition-all duration-300 border cursor-pointer overflow-hidden ${
+                    isSolved 
+                      ? 'bg-gradient-to-br from-emerald-50 via-white to-emerald-50/30 border-emerald-400 shadow-xl shadow-emerald-500/10 -translate-y-1' 
+                      : 'bg-slate-50 border-slate-200/80 hover:border-slate-300 hover:shadow-md'
+                  }`}
+                >
+                  <div className="flex items-start gap-4 relative z-10">
+                    <motion.div 
+                      animate={{ scale: isSolved ? [1, 1.2, 1] : 1, rotate: isSolved ? 360 : 0 }}
+                      transition={{ duration: 0.4 }}
+                      className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 font-bold text-lg shadow-sm ${
+                        isSolved ? 'bg-emerald-500 text-white shadow-emerald-500/30' : 'bg-rose-100 text-rose-600'
+                      }`}
+                    >
+                      {isSolved ? <Check size={20} strokeWidth={3} /> : '✕'}
+                    </motion.div>
+                    
+                    <div>
+                      <span className={`text-xs font-extrabold tracking-wider uppercase mb-1 block ${isSolved ? 'text-emerald-700' : 'text-rose-500'}`}>
+                        {isSolved ? '✨ StudyDesk Solution' : 'Pain Point'}
+                      </span>
+                      <p className={`font-bold text-base transition-colors ${isSolved ? 'text-slate-900' : 'text-slate-700'}`}>
+                        {isSolved ? item.solution : item.problem}
+                      </p>
+                      <p className="text-xs text-slate-400 mt-2 font-medium">
+                        {isSolved ? 'Active Solution' : 'Hover to see solution →'}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              );
+            })}
           </motion.div>
           
-          <div className="text-center bg-brand-50 border border-brand-100 rounded-2xl p-10 max-w-4xl mx-auto">
-            <h3 className="text-2xl md:text-3xl font-bold text-brand-900 mb-4">Your library doesn't need more paperwork.</h3>
-            <p className="text-xl text-brand-700">It needs a better system.</p>
+          <div className="text-center bg-gradient-to-r from-brand-600 to-indigo-700 text-white rounded-3xl p-10 max-w-4xl mx-auto shadow-2xl shadow-brand-600/20 relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <h3 className="text-2xl md:text-4xl font-extrabold mb-3">Your library doesn't need more paperwork.</h3>
+            <p className="text-xl text-brand-100 font-medium mb-6">It needs a modern digital system that works automatically.</p>
+            <DemoCTAButton primary={false} className="bg-white !text-brand-900 hover:bg-slate-100 shadow-lg" />
           </div>
         </div>
       </section>
@@ -587,48 +647,231 @@ export default function Home() {
       </section>
 
       {/* 9. HOW IT WORKS */}
-      <section id="how-it-works" className="py-24 bg-white relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[600px] bg-gradient-to-r from-brand-100/50 via-purple-100/50 to-brand-100/50 rounded-full blur-3xl -z-10"></div>
+      <section id="how-it-works" className="py-24 bg-slate-50 relative overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading 
             title="How it works" 
-            subtitle="That's it. No complicated setup."
+            subtitle="Click any step below to preview how easy it is to operate."
           />
           
-          <motion.div 
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            variants={{
-              visible: { transition: { staggerChildren: 0.15 } },
-              hidden: {}
-            }}
-            className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 relative mt-12"
-          >
-            <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-1 bg-gradient-to-r from-brand-100 via-brand-400 to-brand-100 z-0 rounded-full"></div>
+          {/* Step Selector Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 relative mt-12 mb-12">
             {[
-              { step: '01', title: 'Create your library', desc: 'Setup branding and details in minutes.', icon: <Library size={28}/> },
-              { step: '02', title: 'Add students', desc: 'Import them easily or add manually.', icon: <Users size={28}/> },
-              { step: '03', title: 'Run operations', desc: 'Manage attendance and fees seamlessly.', icon: <Check size={28}/> },
-              { step: '04', title: 'Digital portals', desc: 'Students instantly get access to portals.', icon: <MonitorSmartphone size={28}/> }
-            ].map((s, i) => (
-              <motion.div 
-                key={i} 
-                variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.5 } } }}
-                whileHover={{ y: -5 }}
-                className="relative z-10 flex flex-col items-center text-center bg-white/80 backdrop-blur-xl border border-slate-200 hover:border-brand-400 p-8 rounded-3xl shadow-xl shadow-brand-900/5 transition-all cursor-default"
-              >
-                <div className="absolute -top-4 -right-2 md:-right-4 w-12 h-12 bg-gradient-to-br from-brand-500 to-indigo-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg border-4 border-white">
-                  {s.step}
-                </div>
-                <div className="w-20 h-20 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center mb-6">
-                  {s.icon}
-                </div>
-                <h4 className="text-xl font-bold text-slate-900 mb-3">{s.title}</h4>
-                <p className="text-slate-600">{s.desc}</p>
-              </motion.div>
-            ))}
-          </motion.div>
+              { 
+                step: '01', 
+                title: 'Create your library', 
+                desc: 'Setup branding & shift timings in 3 mins.', 
+                icon: <Library size={24}/>
+              },
+              { 
+                step: '02', 
+                title: 'Add students', 
+                desc: 'Import roster & assign 4-digit terminal PINs.', 
+                icon: <Users size={24}/>
+              },
+              { 
+                step: '03', 
+                title: 'Run operations', 
+                desc: 'Manage live check-ins and auto fees.', 
+                icon: <Check size={24}/>
+              },
+              { 
+                step: '04', 
+                title: 'Digital portals', 
+                desc: 'Students & parents get mobile logins.', 
+                icon: <MonitorSmartphone size={24}/>
+              }
+            ].map((s, i) => {
+              const isActive = activeStep === i;
+              return (
+                <motion.button 
+                  key={i} 
+                  onClick={() => setActiveStep(i)}
+                  whileHover={{ y: -4 }}
+                  className={`relative z-10 text-left p-6 rounded-3xl transition-all duration-300 cursor-pointer overflow-hidden border ${
+                    isActive 
+                      ? 'bg-white border-brand-500 shadow-xl shadow-brand-500/15 ring-4 ring-brand-500/10' 
+                      : 'bg-white/80 border-slate-200 hover:border-slate-300 hover:bg-white'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold transition-all ${
+                      isActive ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'bg-slate-100 text-slate-600'
+                    }`}>
+                      {s.icon}
+                    </div>
+                    <span className={`text-xs font-black px-3 py-1 rounded-full ${
+                      isActive ? 'bg-brand-100 text-brand-700' : 'bg-slate-100 text-slate-500'
+                    }`}>
+                      STEP {s.step}
+                    </span>
+                  </div>
+                  
+                  <h4 className="text-lg font-bold text-slate-900 mb-1">{s.title}</h4>
+                  <p className="text-xs text-slate-500 leading-relaxed">{s.desc}</p>
+
+                  {/* Active Indicator Bar */}
+                  {isActive && (
+                    <motion.div 
+                      layoutId="activeStepLine"
+                      className="absolute bottom-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-500 to-indigo-600"
+                    />
+                  )}
+                </motion.button>
+              );
+            })}
+          </div>
+
+          {/* Interactive Live Interactive Showcase for Active Step */}
+          <div className="bg-white rounded-3xl p-8 md:p-12 border border-slate-200 shadow-xl max-w-4xl mx-auto">
+            <AnimatePresence mode="wait">
+              {activeStep === 0 && (
+                <motion.div 
+                  key="step0"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col md:flex-row items-center gap-8"
+                >
+                  <div className="w-full md:w-1/2">
+                    <span className="text-xs font-extrabold uppercase tracking-widest text-brand-600 bg-brand-50 px-3 py-1 rounded-full mb-3 inline-block">Step 1 Live Preview</span>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">Setup your library in 3 minutes</h3>
+                    <p className="text-slate-600 text-sm mb-6 leading-relaxed">Customize your library name, total seat capacity, operating shift timings (Morning, Evening, Full Day), and fee structures without technical hassle.</p>
+                    <div className="space-y-2 text-sm font-medium">
+                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Custom Shift Plan Creation</div>
+                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Dynamic Pricing per Shift</div>
+                    </div>
+                  </div>
+                  <div className="w-full md:w-1/2 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-inner">
+                    <div className="font-bold text-slate-900 text-sm mb-4 border-b border-slate-200 pb-2 flex items-center justify-between">
+                      <span>🏛️ Library Configuration</span>
+                      <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold">Ready</span>
+                    </div>
+                    <div className="space-y-3">
+                      <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs flex justify-between items-center shadow-sm">
+                        <span className="font-medium text-slate-600">Library Name:</span>
+                        <span className="font-bold text-brand-600">Apex Study Point</span>
+                      </div>
+                      <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs flex justify-between items-center shadow-sm">
+                        <span className="font-medium text-slate-600">Total Capacity:</span>
+                        <span className="font-bold text-slate-900">80 Seats</span>
+                      </div>
+                      <div className="bg-white p-3 rounded-xl border border-slate-200 text-xs flex justify-between items-center shadow-sm">
+                        <span className="font-medium text-slate-600">Shifts Configured:</span>
+                        <span className="font-bold text-emerald-600">3 Active Shifts</span>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeStep === 1 && (
+                <motion.div 
+                  key="step1"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col md:flex-row items-center gap-8"
+                >
+                  <div className="w-full md:w-1/2">
+                    <span className="text-xs font-extrabold uppercase tracking-widest text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full mb-3 inline-block">Step 2 Live Preview</span>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">Add students & allocate seats</h3>
+                    <p className="text-slate-600 text-sm mb-6 leading-relaxed">Assign students to specific seats or shifts. System generates a unique 4-digit PIN for instant terminal check-in at entry.</p>
+                    <div className="space-y-2 text-sm font-medium">
+                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Instant 4-Digit Terminal PIN</div>
+                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Seat & Shift Lock</div>
+                    </div>
+                  </div>
+                  <div className="w-full md:w-1/2 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-inner">
+                    <div className="font-bold text-slate-900 text-sm mb-4 border-b border-slate-200 pb-2 flex items-center justify-between">
+                      <span>👤 Student Admission Card</span>
+                      <span className="text-xs bg-brand-100 text-brand-700 px-2 py-0.5 rounded font-bold">Assigned</span>
+                    </div>
+                    <div className="bg-white p-4 rounded-xl border border-slate-200 flex items-center gap-4 shadow-sm">
+                      <div className="w-12 h-12 rounded-xl bg-brand-600 text-white font-bold flex items-center justify-center text-lg shadow-md">
+                        RK
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-bold text-slate-900 text-sm">Rahul Kumar</div>
+                        <div className="text-xs text-slate-500 font-medium">Seat #42 • Morning Shift</div>
+                        <div className="text-xs text-emerald-600 font-bold mt-1">Fee Status: Paid</div>
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeStep === 2 && (
+                <motion.div 
+                  key="step2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col md:flex-row items-center gap-8"
+                >
+                  <div className="w-full md:w-1/2">
+                    <span className="text-xs font-extrabold uppercase tracking-widest text-amber-600 bg-amber-50 px-3 py-1 rounded-full mb-3 inline-block">Step 3 Live Preview</span>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">Automatic daily operations</h3>
+                    <p className="text-slate-600 text-sm mb-6 leading-relaxed">Students scan or check in at entry. Seat map updates live, and automated WhatsApp payment reminders send when fees are due.</p>
+                    <div className="space-y-2 text-sm font-medium">
+                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Real-time Seat Occupancy</div>
+                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Automated WhatsApp Due Reminders</div>
+                    </div>
+                  </div>
+                  <div className="w-full md:w-1/2 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-inner">
+                    <div className="font-bold text-slate-900 text-sm mb-3 flex justify-between items-center">
+                      <span>⚡ Live Seat Grid</span>
+                      <span className="text-xs text-emerald-600 font-bold bg-emerald-100 px-2 py-0.5 rounded">82% Occupied</span>
+                    </div>
+                    <div className="grid grid-cols-6 gap-2">
+                      {[1,2,3,4,5,6,7,8,9,10,11,12].map((s) => (
+                        <div 
+                          key={s} 
+                          className={`p-2 text-center rounded-lg font-bold text-xs shadow-sm ${
+                            s % 3 === 0 ? 'bg-emerald-500 text-white' : s % 4 === 0 ? 'bg-slate-200 text-slate-600' : 'bg-brand-600 text-white'
+                          }`}
+                        >
+                          {s}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              {activeStep === 3 && (
+                <motion.div 
+                  key="step3"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex flex-col md:flex-row items-center gap-8"
+                >
+                  <div className="w-full md:w-1/2">
+                    <span className="text-xs font-extrabold uppercase tracking-widest text-purple-600 bg-purple-50 px-3 py-1 rounded-full mb-3 inline-block">Step 4 Live Preview</span>
+                    <h3 className="text-2xl font-bold text-slate-900 mb-3">Instant mobile portals for everyone</h3>
+                    <p className="text-slate-600 text-sm mb-6 leading-relaxed">Students check study hours and pay fees online. Parents view attendance logs without disturbing library staff.</p>
+                    <div className="space-y-2 text-sm font-medium">
+                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Student & Parent Mobile App</div>
+                      <div className="flex items-center gap-2 text-slate-700"><Check size={18} className="text-emerald-500"/> Digital Payment Receipts</div>
+                    </div>
+                  </div>
+                  <div className="w-full md:w-1/2 bg-slate-900 p-6 rounded-2xl text-white shadow-xl">
+                    <div className="text-xs text-brand-300 mb-1 font-bold">📱 Student Portal Mobile Screen</div>
+                    <div className="text-lg font-bold text-white mb-3">Welcome back, Rahul!</div>
+                    <div className="bg-slate-800 p-3 rounded-xl border border-slate-700 flex justify-between items-center text-xs">
+                      <span className="text-slate-300 font-medium">Today's Study Time:</span>
+                      <span className="font-bold text-emerald-400">4 hrs 25 mins</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </section>
 
@@ -675,19 +918,19 @@ export default function Home() {
             subtitle="Start with a 1 month free trial. Grow as your library grows."
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto justify-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto justify-center pt-6">
             {siteConfig.pricing.map((plan, i) => (
               <motion.div 
                 key={i} 
                 whileHover={{ y: -6 }}
-                className={`rounded-2xl p-8 border relative overflow-hidden transition-all duration-300 ${
+                className={`rounded-2xl p-8 border relative transition-all duration-300 ${
                   plan.recommended 
                     ? 'border-brand-500 border-t-4 border-t-brand-600 shadow-xl shadow-brand-500/15 bg-gradient-to-b from-brand-50/40 via-white to-white' 
                     : 'border-slate-200 border-t-4 border-t-slate-400 shadow-sm bg-white hover:border-slate-300 hover:shadow-lg'
                 }`}
               >
                 {plan.recommended && (
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-brand-600 to-indigo-600 text-white px-4 py-1 rounded-full text-xs font-extrabold tracking-wider uppercase shadow-md">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand-600 to-indigo-600 text-white px-4 py-1 rounded-full text-[11px] font-extrabold tracking-wider uppercase shadow-md z-20">
                     MOST POPULAR
                   </div>
                 )}

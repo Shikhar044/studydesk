@@ -18,7 +18,7 @@ export const siteConfig = {
       price: "₹0",
       period: "forever free",
       features: [
-        "QR code student registration",
+        "Terminal 4-digit PIN check-in",
         "Basic seat management",
         "Live attendance tracking",
         "1 admin account",
