@@ -106,6 +106,226 @@ const DemoCTAButton = ({ primary = true, className = '' }) => (
   </a>
 );
 
+// Interactive Seat Map Grid Simulator Component
+const InteractiveSeatMapSimulator = () => {
+  const [selectedShift, setSelectedShift] = useState('Morning');
+  const [selectedSeat, setSelectedSeat] = useState({ id: 'A4', name: 'Rahul Sharma', pin: '4092', duration: '4h 15m', shift: 'Morning', status: 'Occupied' });
+
+  const seatsData = [
+    { id: 'A1', status: 'Vacant', name: null },
+    { id: 'A2', status: 'Occupied', name: 'Amit Kumar', pin: '1092', duration: '2h 10m', shift: 'Morning' },
+    { id: 'A3', status: 'Occupied', name: 'Priya Singh', pin: '8841', duration: '5h 30m', shift: 'Morning' },
+    { id: 'A4', status: 'Occupied', name: 'Rahul Sharma', pin: '4092', duration: '4h 15m', shift: 'Morning' },
+    { id: 'A5', status: 'Reserved', name: "Girl's Row" },
+    { id: 'A6', status: 'Vacant', name: null },
+    { id: 'B1', status: 'Occupied', name: 'Saurabh V.', pin: '7120', duration: '1h 45m', shift: 'Morning' },
+    { id: 'B2', status: 'Occupied', name: 'Neha Gupta', pin: '3319', duration: '3h 50m', shift: 'Morning' },
+    { id: 'B3', status: 'Vacant', name: null },
+    { id: 'B4', status: 'Occupied', name: 'Vikas Roy', pin: '9012', duration: '6h 05m', shift: 'Morning' },
+    { id: 'B5', status: 'Reserved', name: 'AC Corner' },
+    { id: 'B6', status: 'Vacant', name: null },
+  ];
+
+  return (
+    <div className="bg-white border border-slate-200/90 rounded-3xl p-6 md:p-8 shadow-xl">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-100">
+        <div>
+          <span className="bg-brand-50 text-brand-600 border border-brand-200 text-[11px] font-black px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
+            ⚡ Live Interactive Kiosk Test-Drive
+          </span>
+          <h3 className="text-xl md:text-2xl font-black text-slate-900">Try The Visual Seat Map Grid</h3>
+          <p className="text-slate-500 text-xs font-medium">Click any seat to view live occupancy details & student PIN check-in logs.</p>
+        </div>
+
+        <div className="flex bg-slate-100 p-1 rounded-xl">
+          {['Morning', 'Evening', 'Full Day'].map((shift) => (
+            <button
+              key={shift}
+              onClick={() => setSelectedShift(shift)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                selectedShift === shift ? 'bg-brand-600 text-white shadow-sm' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              {shift}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+        {/* Seat Grid (7 cols) */}
+        <div className="lg:col-span-7 bg-slate-50 p-4 md:p-6 rounded-2xl border border-slate-200">
+          <div className="flex items-center justify-between mb-4 text-[11px] font-extrabold text-slate-400 uppercase tracking-wider">
+            <span>Reception Gate</span>
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1 text-emerald-600"><span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span> Vacant (4)</span>
+              <span className="flex items-center gap-1 text-brand-600"><span className="w-2.5 h-2.5 rounded-full bg-brand-600"></span> Occupied (6)</span>
+              <span className="flex items-center gap-1 text-amber-600"><span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span> Reserved (2)</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+            {seatsData.map((seat) => (
+              <button
+                key={seat.id}
+                onClick={() => setSelectedSeat(seat)}
+                className={`p-3 rounded-xl border-2 text-center transition-all cursor-pointer relative overflow-hidden ${
+                  selectedSeat?.id === seat.id ? 'ring-2 ring-brand-600 ring-offset-2 scale-105 shadow-md' : ''
+                } ${
+                  seat.status === 'Occupied' 
+                    ? 'bg-brand-50 border-brand-300 text-brand-700' 
+                    : seat.status === 'Reserved'
+                    ? 'bg-amber-50 border-amber-300 text-amber-700'
+                    : 'bg-white border-emerald-300 text-emerald-700 hover:bg-emerald-50'
+                }`}
+              >
+                <div className="font-black text-sm">{seat.id}</div>
+                <div className="text-[10px] font-bold truncate mt-0.5">{seat.name || 'Vacant'}</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Selected Seat Inspector Card (5 cols) */}
+        <div className="lg:col-span-5 bg-slate-900 text-white p-6 rounded-2xl border border-slate-800 shadow-xl flex flex-col justify-between min-h-[260px]">
+          {selectedSeat ? (
+            <div>
+              <div className="flex items-center justify-between mb-4 border-b border-slate-800 pb-3">
+                <span className="text-[11px] font-black uppercase text-brand-400 tracking-wider">Seat Inspector</span>
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                  selectedSeat.status === 'Occupied' ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-slate-800 text-slate-400'
+                }`}>
+                  ● {selectedSeat.status}
+                </span>
+              </div>
+
+              <div className="text-2xl font-black text-white mb-1">Seat {selectedSeat.id}</div>
+              <div className="text-slate-300 text-sm font-semibold mb-4">{selectedSeat.name || 'Available for Allocation'}</div>
+
+              {selectedSeat.status === 'Occupied' ? (
+                <div className="space-y-2.5 bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 text-xs">
+                  <div className="flex justify-between"><span className="text-slate-400">Shift:</span> <span className="font-bold text-white">{selectedSeat.shift}</span></div>
+                  <div className="flex justify-between"><span className="text-slate-400">Terminal PIN Check-in:</span> <span className="font-bold text-brand-400">#{selectedSeat.pin}</span></div>
+                  <div className="flex justify-between"><span className="text-slate-400">Current Session Time:</span> <span className="font-bold text-emerald-400">{selectedSeat.duration}</span></div>
+                </div>
+              ) : (
+                <p className="text-xs text-slate-400 leading-relaxed bg-slate-950/50 p-3 rounded-xl">
+                  This seat is currently vacant in the {selectedShift} Shift. 1-click allocation available in the Owner Dashboard.
+                </p>
+              )}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-slate-400 text-xs font-medium">Click any seat on the grid to inspect live details.</div>
+          )}
+
+          <div className="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-semibold flex items-center justify-between">
+            <span>⚡ StudyDesk Live Engine</span>
+            <span className="text-emerald-400 font-bold">100% Sync</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Interactive ROI & Savings Calculator
+const InteractiveROICalculator = () => {
+  const [seats, setSeats] = useState(80);
+  const [fee, setFee] = useState(1200);
+
+  const monthlyRevenue = seats * fee;
+  const yearlyRevenue = monthlyRevenue * 12;
+  const feeLeakageSaved = Math.round(monthlyRevenue * 0.10);
+  const hoursSaved = Math.round(seats * 0.5);
+
+  return (
+    <div className="bg-gradient-to-br from-brand-950 via-slate-900 to-indigo-950 text-white rounded-3xl p-8 md:p-10 shadow-2xl relative overflow-hidden border border-brand-800/60 my-12">
+      <div className="absolute top-0 right-0 w-96 h-96 bg-brand-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div className="max-w-3xl mb-8">
+        <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-black px-3.5 py-1.5 rounded-full uppercase tracking-wider inline-block mb-3">
+          🧮 Interactive Profit & Revenue Calculator
+        </span>
+        <h3 className="text-2xl md:text-4xl font-black text-white mb-2">Calculate Your Library Revenue & Time Savings</h3>
+        <p className="text-slate-300 text-sm">Adjust the sliders below to estimate your monthly revenue and saved staff hours.</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        {/* Sliders (6 cols) */}
+        <div className="lg:col-span-6 space-y-6 bg-slate-900/90 p-6 rounded-2xl border border-slate-800">
+          <div>
+            <div className="flex justify-between items-center text-sm font-extrabold mb-2">
+              <span className="text-slate-300">Total Student Seats</span>
+              <span className="text-brand-400 font-black text-lg">{seats} Seats</span>
+            </div>
+            <input 
+              type="range" 
+              min="20" 
+              max="300" 
+              step="5" 
+              value={seats}
+              onChange={(e) => setSeats(Number(e.target.value))}
+              className="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-brand-500"
+            />
+            <div className="flex justify-between text-[10px] text-slate-500 font-bold mt-1">
+              <span>20 Seats</span>
+              <span>150 Seats</span>
+              <span>300 Seats</span>
+            </div>
+          </div>
+
+          <div>
+            <div className="flex justify-between items-center text-sm font-extrabold mb-2">
+              <span className="text-slate-300">Average Monthly Fee / Student</span>
+              <span className="text-emerald-400 font-black text-lg">₹{fee.toLocaleString('en-IN')} / mo</span>
+            </div>
+            <input 
+              type="range" 
+              min="500" 
+              max="3000" 
+              step="50" 
+              value={fee}
+              onChange={(e) => setFee(Number(e.target.value))}
+              className="w-full h-2.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+            />
+            <div className="flex justify-between text-[10px] text-slate-500 font-bold mt-1">
+              <span>₹500</span>
+              <span>₹1,800</span>
+              <span>₹3,000</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Calculated Results (6 cols) */}
+        <div className="lg:col-span-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 shadow-lg">
+            <div className="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-1">Est. Monthly Revenue</div>
+            <div className="text-2xl md:text-3xl font-black text-white">₹{monthlyRevenue.toLocaleString('en-IN')}</div>
+            <div className="text-[11px] text-slate-400 font-semibold mt-1">₹{(yearlyRevenue / 100000).toFixed(2)} Lakh / Year</div>
+          </div>
+
+          <div className="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 shadow-lg">
+            <div className="text-[11px] font-extrabold text-emerald-400 uppercase tracking-wider mb-1">Fee Leakage Prevented</div>
+            <div className="text-2xl md:text-3xl font-black text-emerald-400">₹{feeLeakageSaved.toLocaleString('en-IN')}<span className="text-xs text-slate-400">/mo</span></div>
+            <div className="text-[11px] text-slate-400 font-semibold mt-1">From automated WhatsApp alerts</div>
+          </div>
+
+          <div className="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 shadow-lg sm:col-span-2 flex items-center justify-between">
+            <div>
+              <div className="text-[11px] font-extrabold text-brand-400 uppercase tracking-wider mb-1">Staff Hours Saved</div>
+              <div className="text-2xl font-black text-white">{hoursSaved} Hours / Month</div>
+              <div className="text-[11px] text-slate-400 font-semibold">Zero manual register entry</div>
+            </div>
+            <div className="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-black text-xl">
+              ⏱
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export default function Home() {
   const [activeFeature, setActiveFeature] = useState(0);
   const [activeFaq, setActiveFaq] = useState(0);
@@ -145,6 +365,11 @@ export default function Home() {
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
     setRegistrationSuccess(true);
+    // Redirect to the live app onboarding wizard on port 5173 with prefilled params
+    const appUrl = `http://localhost:5173/?onboarding=true&name=${encodeURIComponent(formData.libraryName)}&email=${encodeURIComponent(formData.email)}&slug=${encodeURIComponent(formData.slug)}`;
+    setTimeout(() => {
+      window.location.href = appUrl;
+    }, 1500);
   };
   
   const trustItems = ['Student Management', 'Live Attendance', 'Seat Management', 'Fee Tracking', 'Student Portal', 'Library Growth', 'Revenue Analytics'];
@@ -461,6 +686,11 @@ export default function Home() {
               </ul>
             </motion.div>
           </motion.div>
+
+          {/* Interactive Live Seat Map Test-Drive */}
+          <div className="mt-16">
+            <InteractiveSeatMapSimulator />
+          </div>
         </div>
       </section>
 
@@ -909,34 +1139,93 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 10. WHY CHOOSE US */}
-      <section className="py-24 bg-slate-50">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading title="Why choose our platform?" />
-          
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div className="grid grid-cols-3 bg-slate-100 font-bold text-slate-900 p-4 border-b border-slate-200 text-sm md:text-base">
-              <div>Feature</div>
-              <div className="text-center text-slate-500">Traditional/Generic</div>
-              <div className="text-center text-brand-600 flex items-center justify-center gap-2">
-                <div className="w-6 h-6 rounded bg-brand-600 text-white flex items-center justify-center text-xs">S</div>
-                {siteConfig.name}
+      {/* 10. STUDYDESK BUSINESS IMPACT & ROI COMPARISON */}
+      <section className="py-24 bg-gradient-to-b from-slate-50 via-blue-50/30 to-slate-50 relative overflow-hidden border-y border-slate-200/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <SectionHeading 
+            title="Designed Specially for Modern Study Libraries" 
+            subtitle="See how StudyDesk eliminates manual workload, prevents fee leakage, and builds your local library brand."
+          />
+
+          {/* ROI Metric Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <motion.div 
+              whileHover={{ y: -4 }}
+              className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-lg shadow-brand-500/5 relative overflow-hidden"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-black text-xl mb-4">
+                💰
+              </div>
+              <div className="text-3xl font-black text-slate-900 mb-1">Save ₹1.2 Lakh / yr</div>
+              <div className="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-3">Zero Salary & Zero Fee Leakage</div>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                Eliminates paper registers & receptionist overhead. Automated due alerts stop lost membership fees.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ y: -4 }}
+              className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-lg shadow-brand-500/5 relative overflow-hidden"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center font-black text-xl mb-4">
+                🌐
+              </div>
+              <div className="text-3xl font-black text-slate-900 mb-1">Public Library Webpage</div>
+              <div className="text-xs font-bold uppercase tracking-wider text-brand-600 mb-3">2x New Student Admissions</div>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                Get a dedicated web address (`studydesk.in/l/your-name`) to showcase your seats, shifts & pricing online.
+              </p>
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ y: -4 }}
+              className="bg-white p-8 rounded-3xl border border-slate-200/80 shadow-lg shadow-brand-500/5 relative overflow-hidden"
+            >
+              <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-600 flex items-center justify-center font-black text-xl mb-4">
+                📱
+              </div>
+              <div className="text-3xl font-black text-slate-900 mb-1">Student & Parent Portal</div>
+              <div className="text-xs font-bold uppercase tracking-wider text-indigo-600 mb-3">100% Digital Experience</div>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                Students check study hours and pay online. Parents get direct digital attendance transparency.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Interactive Profit & Revenue Calculator */}
+          <InteractiveROICalculator />
+
+          {/* Clean Light-Theme Comparison Grid */}
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden">
+            <div className="grid grid-cols-12 bg-slate-900 text-white p-5 font-bold text-xs md:text-sm tracking-wide">
+              <div className="col-span-5 md:col-span-4">Feature & Capabilities</div>
+              <div className="col-span-3 md:col-span-3 text-slate-400">Old Paper Registers</div>
+              <div className="col-span-4 md:col-span-5 text-brand-400 flex items-center gap-1.5 font-black">
+                <Sparkles size={16} /> StudyDesk Platform
               </div>
             </div>
-            
+
             {[
-              { f: 'Library Specific Design', old: 'No', new: 'Yes' },
-              { f: 'Live Seat Management', old: 'No', new: 'Yes' },
-              { f: 'Student & Parent Portal', old: 'No', new: 'Yes' },
-              { f: 'Public Library Webpage', old: 'No', new: 'Yes' },
-              { f: 'Automated Fee Tracking', old: 'Manual', new: 'Yes' },
-              { f: 'Business Insights', old: 'None', new: 'Real-time' },
-            ].map((row, i) => (
-              <div key={i} className="grid grid-cols-3 p-4 border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                <div className="font-medium text-slate-700">{row.f}</div>
-                <div className="text-center text-slate-500">{row.old}</div>
-                <div className="text-center text-brand-600 font-bold flex justify-center">
-                  {row.new === 'Yes' ? <Check size={20} /> : row.new}
+              { factor: 'Reception & Entry Check-in', old: 'Manual paper logs & human errors', new: 'Self-Service 4-Digit Terminal PIN' },
+              { factor: 'Live Seat Management', old: 'Guesswork & double-booking risk', new: 'Interactive Visual Seat Occupancy Map' },
+              { factor: 'Fee Due Reminders', old: 'Manual uncomfortable phone calls', new: 'Automated Email & 1-Click WhatsApp' },
+              { factor: 'Public Web Address for Business', old: 'None (Zero online visibility)', new: 'Branded Library Webpage (studydesk.in/l/slug)' },
+              { factor: 'Student & Parent Transparency', old: 'Frequent calls & lost receipts', new: 'Dedicated 24/7 Digital Student Portal' },
+              { factor: 'Multi-Branch Management', old: 'Requires physical visits to each branch', new: '1-Click Centralized Multi-Branch Control' },
+            ].map((row, idx) => (
+              <div 
+                key={idx} 
+                className={`grid grid-cols-12 p-4 md:p-5 text-xs md:text-sm items-center border-b border-slate-100 transition-colors ${
+                  idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'
+                } hover:bg-brand-50/30`}
+              >
+                <div className="col-span-5 md:col-span-4 font-bold text-slate-900">{row.factor}</div>
+                <div className="col-span-3 md:col-span-3 text-slate-500 font-medium text-xs md:text-sm">{row.old}</div>
+                <div className="col-span-4 md:col-span-5 text-brand-600 font-bold flex items-center gap-2 text-xs md:text-sm">
+                  <div className="w-5 h-5 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                    <Check size={13} strokeWidth={3} />
+                  </div>
+                  <span>{row.new}</span>
                 </div>
               </div>
             ))}
@@ -952,7 +1241,7 @@ export default function Home() {
             subtitle="Start with a 1 month free trial. Grow as your library grows."
           />
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto justify-center pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto justify-center pt-6">
             {siteConfig.pricing.map((plan, i) => (
               <motion.div 
                 key={i} 
@@ -965,7 +1254,7 @@ export default function Home() {
               >
                 {plan.recommended && (
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600 text-white px-4 py-1 rounded-full text-[11px] font-black tracking-wider uppercase shadow-md z-20 flex items-center gap-1">
-                    <Sparkles size={13} /> MOST POPULAR
+                    <Sparkles size={13} /> RECOMMENDED
                   </div>
                 )}
 
@@ -1052,91 +1341,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 12. SAVINGS & ROI COMPARISON SECTION (Manual vs StudyDesk) */}
-      <section className="py-24 bg-slate-900 text-white relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-brand-600/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionHeading 
-            title="Manual Registers vs. StudyDesk Platform" 
-            subtitle="See how much time, money, and hassle your library saves every single month."
-          />
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch mt-12">
-            {/* Savings & ROI Highlights (4 Cols) */}
-            <div className="lg:col-span-4 bg-gradient-to-br from-slate-800 via-slate-800 to-slate-950 p-8 rounded-3xl border border-slate-700 flex flex-col justify-between shadow-2xl">
-              <div>
-                <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider inline-block mb-6">
-                  💰 Verified ROI
-                </span>
-                <h3 className="text-3xl font-extrabold text-white mb-4">Save up to ₹1.2 Lakh / year</h3>
-                <p className="text-slate-300 text-sm leading-relaxed mb-6">
-                  Paper registers lead to unpaid fee leaks, manual attendance errors, and high receptionist costs. StudyDesk automates operations so 1 owner can manage 300+ students effortlessly.
-                </p>
-
-                <div className="space-y-3 border-t border-slate-700/80 pt-6 mb-6">
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">✓</div>
-                    <span className="text-sm font-semibold text-slate-200">Zero Uncollected Fee Leaks</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">✓</div>
-                    <span className="text-sm font-semibold text-slate-200">Branded Public Library Webpage</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold">✓</div>
-                    <span className="text-sm font-semibold text-slate-200">Dedicated Student & Parent Portal</span>
-                  </div>
-                </div>
-              </div>
-
-              <button 
-                onClick={() => openRegistrationModal('Free Plan')}
-                className="w-full py-4 rounded-xl font-bold bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white shadow-xl shadow-brand-600/30 text-center transition-all cursor-pointer"
-              >
-                Start Saving Today — Free Trial →
-              </button>
-            </div>
-
-            {/* Comparison Table (8 Cols) */}
-            <div className="lg:col-span-8 bg-slate-800/60 border border-slate-700/80 rounded-3xl overflow-hidden shadow-2xl backdrop-blur-md">
-              <div className="grid grid-cols-12 bg-slate-800 p-4 border-b border-slate-700 text-xs md:text-sm font-extrabold text-slate-300 uppercase tracking-wider">
-                <div className="col-span-5">Operational Factor</div>
-                <div className="col-span-3 text-rose-400">Old Manual Register</div>
-                <div className="col-span-4 text-emerald-400 flex items-center gap-1.5">
-                  <Sparkles size={16} /> StudyDesk Platform
-                </div>
-              </div>
-
-              {[
-                { factor: 'Monthly Staff Salary', old: '₹8,000 - ₹12,000/mo', new: '₹0 (Self-Service PIN Kiosk)' },
-                { factor: 'Attendance & Entry Logs', old: 'Manual paper registers (human errors)', new: '100% Digital PIN Check-in' },
-                { factor: 'Unpaid Fee Reminders', old: 'Forgotten or uncomfortable calls', new: 'Automated Email & WhatsApp' },
-                { factor: 'Public Online Presence', old: 'None (No web page for business)', new: 'Branded Public Library Page' },
-                { factor: 'Student & Parent Access', old: 'Paper slips & frequent calls', new: '24/7 Digital Student Portal' },
-                { factor: 'Seat Capacity & Occupancy', old: 'Guesswork & double-booking', new: 'Live Real-time Seat Map' },
-                { factor: 'Multi-Branch Management', old: 'Impossible without physical visit', new: '1-Click Centralized Admin' },
-              ].map((row, idx) => (
-                <div 
-                  key={idx} 
-                  className={`grid grid-cols-12 p-4 text-xs md:text-sm items-center border-b border-slate-700/50 transition-colors ${
-                    idx % 2 === 0 ? 'bg-slate-900/40' : 'bg-slate-900/80'
-                  } hover:bg-slate-800/80`}
-                >
-                  <div className="col-span-5 font-bold text-slate-200">{row.factor}</div>
-                  <div className="col-span-3 text-slate-400 font-medium flex items-center gap-1">
-                    <span className="text-rose-400 font-bold">✕</span> {row.old}
-                  </div>
-                  <div className="col-span-4 text-emerald-400 font-bold flex items-center gap-1.5">
-                    <Check size={18} className="text-emerald-400 shrink-0" /> {row.new}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 13. FAQ */}
+      {/* 12. FAQ */}
       <section id="faq" className="py-24 bg-slate-50">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading title="Frequently Asked Questions" />
@@ -1154,7 +1359,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 14. FINAL CTA */}
+      {/* 13. FINAL CTA */}
       <section className="py-24 bg-brand-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
@@ -1181,19 +1386,22 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 15. SELF-SERVICE ONBOARDING & LIBRARY CREATION MODAL */}
+      {/* 14. SELF-SERVICE ONBOARDING & LIBRARY CREATION MODAL */}
       <AnimatePresence>
         {isRegistrationOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm overflow-y-auto">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md overflow-y-auto">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 md:p-8 text-white shadow-2xl relative my-8"
+              className="bg-white border border-slate-200 rounded-3xl max-w-lg w-full p-6 md:p-8 text-slate-900 shadow-2xl relative my-8 overflow-hidden"
             >
+              {/* Brand Top Gradient Bar */}
+              <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600"></div>
+
               <button 
                 onClick={() => setIsRegistrationOpen(false)}
-                className="absolute top-5 right-5 text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer"
+                className="absolute top-5 right-5 text-slate-400 hover:text-slate-700 bg-slate-100 hover:bg-slate-200 w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer"
               >
                 <X size={18} />
               </button>
@@ -1201,101 +1409,101 @@ export default function Home() {
               {!registrationSuccess ? (
                 <>
                   <div className="mb-6">
-                    <span className="bg-brand-500/20 text-brand-400 border border-brand-500/30 text-xs font-extrabold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
-                      Instant 1-Month Free Trial
+                    <span className="bg-brand-50 text-brand-700 border border-brand-200/80 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
+                      1-Month Free Trial • No Credit Card
                     </span>
-                    <h3 className="text-2xl font-bold text-white mb-1">Create Your Library Account</h3>
-                    <p className="text-slate-400 text-sm">No manual setup required. Selected: <span className="text-brand-400 font-semibold">{selectedPlan}</span></p>
+                    <h3 className="text-2xl font-black text-slate-900 mb-1">Create Your Library Portal</h3>
+                    <p className="text-slate-500 text-xs">Set up your business dashboard in 60 seconds. Selected: <span className="text-brand-600 font-extrabold">{selectedPlan}</span></p>
                   </div>
 
                   <form onSubmit={handleRegisterSubmit} className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Your Full Name</label>
+                      <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Your Full Name</label>
                       <div className="relative">
-                        <User size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                        <User size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input 
                           type="text"
                           required
                           placeholder="e.g. Rahul Sharma"
                           value={formData.fullName}
                           onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 font-medium"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Email Address</label>
+                      <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Email Address</label>
                       <div className="relative">
-                        <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                        <Mail size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input 
                           type="email"
                           required
                           placeholder="e.g. owner@apexlibrary.com"
                           value={formData.email}
                           onChange={(e) => setFormData({...formData, email: e.target.value})}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 font-medium"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Library / Business Name</label>
+                      <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Library / Business Name</label>
                       <div className="relative">
-                        <Building2 size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                        <Building2 size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                         <input 
                           type="text"
                           required
                           placeholder="e.g. Apex Study Point"
                           value={formData.libraryName}
                           onChange={handleLibraryNameChange}
-                          className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-3 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500"
+                          className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 font-medium"
                         />
                       </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Your Library Slug / Web Link</label>
-                      <div className="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 flex items-center gap-1 text-sm text-slate-400">
-                        <span className="text-slate-500 text-xs font-semibold">library-desk.vercel.app/l/</span>
+                      <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Your Library Public Web Link</label>
+                      <div className="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 flex items-center gap-1 text-sm text-slate-500">
+                        <span className="text-slate-400 text-xs font-bold">studydesk.in/l/</span>
                         <input 
                           type="text"
                           required
                           placeholder="apexstudypoint"
                           value={formData.slug}
                           onChange={(e) => setFormData({...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')})}
-                          className="bg-transparent text-emerald-400 font-bold focus:outline-none flex-1 text-sm"
+                          className="bg-transparent text-brand-600 font-extrabold focus:outline-none flex-1 text-sm"
                         />
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Password</label>
+                        <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Password</label>
                         <div className="relative">
-                          <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                          <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                           <input 
                             type="password"
                             required
                             placeholder="••••••••"
                             value={formData.password}
                             onChange={(e) => setFormData({...formData, password: e.target.value})}
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500"
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 font-medium"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Confirm Password</label>
+                        <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Confirm Password</label>
                         <div className="relative">
-                          <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500" />
+                          <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                           <input 
                             type="password"
                             required
                             placeholder="••••••••"
                             value={formData.confirmPassword}
                             onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                            className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-brand-500"
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 font-medium"
                           />
                         </div>
                       </div>
@@ -1303,25 +1511,25 @@ export default function Home() {
 
                     <button
                       type="submit"
-                      className="w-full mt-2 py-3.5 rounded-xl font-bold bg-gradient-to-r from-brand-600 via-brand-500 to-indigo-600 text-white shadow-lg shadow-brand-600/30 hover:opacity-95 transition-all text-base flex items-center justify-center gap-2 cursor-pointer"
+                      className="w-full mt-2 py-4 rounded-xl font-extrabold bg-gradient-to-r from-brand-600 via-brand-600 to-indigo-600 text-white shadow-xl shadow-brand-600/25 hover:opacity-95 transition-all text-base flex items-center justify-center gap-2 cursor-pointer"
                     >
-                      <span>🚀 Launch My Library & Start Trial</span>
+                      <span>🚀 Create Library & Start Trial</span>
                     </button>
                   </form>
                 </>
               ) : (
                 <div className="text-center py-4">
-                  <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto mb-4 border border-emerald-500/30">
+                  <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto mb-4 border border-emerald-200">
                     <CheckCircle2 size={36} />
                   </div>
-                  <h3 className="text-2xl font-bold text-white mb-2">🎉 Your Library is Ready!</h3>
-                  <p className="text-slate-300 text-sm mb-6 max-w-sm mx-auto">
-                    We have configured the 1-month trial for <span className="font-bold text-white">{formData.libraryName || 'Your Library'}</span> under the <span className="text-brand-400 font-bold">{selectedPlan}</span>.
+                  <h3 className="text-2xl font-extrabold text-slate-900 mb-2">🎉 Your Library is Ready!</h3>
+                  <p className="text-slate-600 text-sm mb-6 max-w-sm mx-auto">
+                    We have created the trial environment for <span className="font-bold text-slate-900">{formData.libraryName || 'Your Library'}</span> under the <span className="text-brand-600 font-bold">{selectedPlan}</span>.
                   </p>
 
-                  <div className="bg-slate-950 border border-slate-800 p-4 rounded-2xl mb-6 text-left">
-                    <div className="text-xs text-slate-400 mb-1">Your Custom Library URL:</div>
-                    <div className="text-emerald-400 font-bold text-sm select-all break-all">
+                  <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl mb-6 text-left">
+                    <div className="text-xs text-slate-500 font-bold mb-1">Your Custom Library URL:</div>
+                    <div className="text-brand-600 font-black text-sm select-all break-all">
                       https://library-desk.vercel.app/l/{formData.slug || 'mylibrary'}
                     </div>
                   </div>
@@ -1330,14 +1538,14 @@ export default function Home() {
                     href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(`Hi! I just registered my library "${formData.libraryName}" (URL: library-desk.vercel.app/l/${formData.slug}) for the 1-month free trial on ${selectedPlan}. Please activate my owner access.`)}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="block w-full py-3.5 rounded-xl font-bold bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/20 transition-all text-center mb-3"
+                    className="block w-full py-3.5 rounded-xl font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-600/20 transition-all text-center mb-3 cursor-pointer"
                   >
                     Open Dashboard & Activate Instant Trial →
                   </a>
 
                   <button 
                     onClick={() => setIsRegistrationOpen(false)}
-                    className="text-slate-400 hover:text-white text-xs font-semibold cursor-pointer"
+                    className="text-slate-400 hover:text-slate-700 text-xs font-semibold cursor-pointer"
                   >
                     Close Window
                   </button>

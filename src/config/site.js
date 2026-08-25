@@ -13,51 +13,88 @@ export const siteConfig = {
   },
   pricing: [
     {
-      name: "Free Plan",
-      subtitle: "Perfect for small libraries just starting out",
-      students: "For small libraries (up to 50 students)",
+      id: "free",
+      name: "Free Forever",
+      subtitle: "Essential tools for small libraries",
+      students: "Up to 50 active students",
       price: "₹0",
       period: "forever free",
       ctaText: "Get Started Free",
       features: [
         "Up to 50 active students",
-        "Full seat & shift management",
         "Terminal 4-digit PIN check-in",
-        "Live attendance & seat map",
-        "Student & Parent mobile portal",
-        "Automated email & manual WhatsApp fee reminders",
-        "1 admin account",
-        "Standard support"
+        "Seat & shift management",
+        "Fee register & receipts",
+        "Student & Parent mobile portal"
       ],
       disabledFeatures: [
-        "Unlimited active students (Capped at 50)",
-        "Multi-branch management",
-        "Multiple admin & staff accounts",
-        "Priority 24/7 Phone & WhatsApp support"
+        "QR Pass Attendance Mode",
+        "WhatsApp Automation",
+        "Advanced Revenue Analytics",
+        "Custom Branding"
       ],
       recommended: false
     },
     {
-      name: "Premium Plan",
-      subtitle: "All features for growing libraries & scaling branches",
-      students: "For growing & multi-branch libraries",
-      price: "₹499",
-      period: "/year",
-      savings: "Save ₹1,200 vs manual operational costs",
-      ctaText: "Start 1-Month Free Trial",
+      id: "starter",
+      name: "Starter Plan",
+      subtitle: "For growing libraries unlocking QR attendance",
+      students: "Up to 60 active students",
+      price: "₹139",
+      period: "/month (or ₹599/yr)",
+      ctaText: "Choose Starter",
       features: [
-        "UNLIMITED active students",
-        "Unlimited branch management",
-        "Full seat & shift management",
-        "Terminal 4-digit PIN check-in",
-        "Live attendance & seat map",
-        "Student & Parent mobile portal",
-        "Automated email & manual WhatsApp fee reminders",
-        "Multiple admin & staff accounts",
-        "Priority 24/7 Phone & WhatsApp support"
+        "Up to 60 active students",
+        "📷 Digital Student QR ID Pass",
+        "📷 Kiosk Camera QR Scanner",
+        "Public Branded Library Page",
+        "WhatsApp Notice Notifications",
+        "All Free Plan features"
+      ],
+      disabledFeatures: [
+        "Advanced Revenue Analytics",
+        "Custom Domain & Branding"
+      ],
+      recommended: true
+    },
+    {
+      id: "growth",
+      name: "Growth Plan",
+      subtitle: "For established libraries needing detailed analytics",
+      students: "Up to 100 active students",
+      price: "₹299",
+      period: "/month (or ₹1,299/yr)",
+      ctaText: "Choose Growth",
+      features: [
+        "Up to 100 active students",
+        "📊 Advanced Revenue & Profit Reports",
+        "📊 Student Attendance Analytics",
+        "All Starter Plan features",
+        "Unlimited Student To-Do Tracking"
+      ],
+      disabledFeatures: [
+        "Priority 24/7 Phone Support",
+        "Custom Subdomain & White-Label"
+      ],
+      recommended: false
+    },
+    {
+      id: "pro",
+      name: "Pro Plan",
+      subtitle: "Maximum capacity with priority support & custom branding",
+      students: "Up to 150 active students",
+      price: "₹499",
+      period: "/month (or ₹1,999/yr)",
+      ctaText: "Choose Pro",
+      features: [
+        "Up to 150 active students",
+        "🎨 Custom Subdomain & Full Branding",
+        "📞 Priority 24/7 VIP Phone Support",
+        "All Growth Plan features",
+        "Multi-Branch Expansion Ready"
       ],
       disabledFeatures: [],
-      recommended: true
+      recommended: false
     }
   ]
 };
