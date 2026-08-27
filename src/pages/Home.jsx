@@ -346,8 +346,11 @@ export default function Home() {
     confirmPassword: ''
   });
 
+  const [formError, setFormError] = useState('');
+
   const openRegistrationModal = (planName = 'Free Plan') => {
     setSelectedPlan(planName);
+    setFormError('');
     setRegistrationSuccess(false);
     setIsRegistrationOpen(true);
   };
@@ -364,12 +367,28 @@ export default function Home() {
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
+    if (formData.password !== formData.confirmPassword) {
+      setFormError('Passwords do not match. Please enter matching passwords.');
+      return;
+    }
+    if (formData.password.length < 4) {
+      setFormError('Password must be at least 4 characters long.');
+      return;
+    }
+
+    setFormError('');
     setRegistrationSuccess(true);
-    // Redirect to the live app onboarding wizard on port 5173 with prefilled params
-    const appUrl = `http://localhost:5173/?onboarding=true&name=${encodeURIComponent(formData.libraryName)}&email=${encodeURIComponent(formData.email)}&slug=${encodeURIComponent(formData.slug)}`;
+    const currentPort = window.location.port;
+    const targetPort = currentPort === '5173' ? '5174' : (currentPort === '5174' ? '5173' : currentPort);
+    const baseUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+      ? `http://${window.location.hostname}:${targetPort}`
+      : 'https://library-desk.vercel.app';
+
+    const appUrl = `${baseUrl}/?onboarding=true&libraryName=${encodeURIComponent(formData.libraryName)}&ownerName=${encodeURIComponent(formData.fullName)}&email=${encodeURIComponent(formData.email)}&slug=${encodeURIComponent(formData.slug)}&plan=${encodeURIComponent(selectedPlan)}`;
+
     setTimeout(() => {
       window.location.href = appUrl;
-    }, 1500);
+    }, 1200);
   };
   
   const trustItems = ['Student Management', 'Live Attendance', 'Seat Management', 'Fee Tracking', 'Student Portal', 'Library Growth', 'Revenue Analytics'];
@@ -1410,11 +1429,17 @@ export default function Home() {
                 <>
                   <div className="mb-6">
                     <span className="bg-brand-50 text-brand-700 border border-brand-200/80 text-xs font-black px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
-                      1-Month Free Trial • No Credit Card
+                      {selectedPlan.toLowerCase().includes('free') ? 'FREE FOREVER • NO CREDIT CARD' : '1-MONTH FREE TRIAL • NO CREDIT CARD'}
                     </span>
                     <h3 className="text-2xl font-black text-slate-900 mb-1">Create Your Library Portal</h3>
                     <p className="text-slate-500 text-xs">Set up your business dashboard in 60 seconds. Selected: <span className="text-brand-600 font-extrabold">{selectedPlan}</span></p>
                   </div>
+
+                  {formError && (
+                    <div className="mb-4 p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-600 text-xs font-bold flex items-center gap-2">
+                      <span>🚨 {formError}</span>
+                    </div>
+                  )}
 
                   <form onSubmit={handleRegisterSubmit} className="space-y-4">
                     <div>
@@ -1465,7 +1490,7 @@ export default function Home() {
                     <div>
                       <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Your Library Public Web Link</label>
                       <div className="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 flex items-center gap-1 text-sm text-slate-500">
-                        <span className="text-slate-400 text-xs font-bold">studydesk.in/l/</span>
+                        <span className="text-slate-400 text-xs font-bold">library-desk.vercel.app/l/</span>
                         <input 
                           type="text"
                           required
@@ -1535,12 +1560,10 @@ export default function Home() {
                   </div>
 
                   <a 
-                    href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(`Hi! I just registered my library "${formData.libraryName}" (URL: library-desk.vercel.app/l/${formData.slug}) for the 1-month free trial on ${selectedPlan}. Please activate my owner access.`)}`}
-                    target="_blank"
-                    rel="noreferrer"
+                    href={`${(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? `http://${window.location.hostname}:${window.location.port === '5173' ? '5174' : '5173'}` : 'https://library-desk.vercel.app'}/?onboarding=true&libraryName=${encodeURIComponent(formData.libraryName)}&ownerName=${encodeURIComponent(formData.fullName)}&email=${encodeURIComponent(formData.email)}&slug=${encodeURIComponent(formData.slug)}&plan=${encodeURIComponent(selectedPlan)}`}
                     className="block w-full py-3.5 rounded-xl font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-600/20 transition-all text-center mb-3 cursor-pointer"
                   >
-                    Open Dashboard & Activate Instant Trial →
+                    🚀 Open Dashboard & Setup Library →
                   </a>
 
                   <button 
