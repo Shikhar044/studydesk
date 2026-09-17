@@ -1,11 +1,14 @@
 export const siteConfig = {
-  name: "StudyDesk",
-  description: "Everything your study library needs, in one place.",
+  name: "LibryOS",
+  brandName: "LibryOS",
+  tagline: "The Operating System for Modern Study Libraries",
+  description: "Everything your study library needs, in one place. Automated seat management, live attendance, and fee tracking.",
+  appUrl: import.meta.env.VITE_APP_URL || "https://library-system-mu-eight.vercel.app",
   contact: {
     email: "supportlibrarysaas@gmail.com",
     phone: "+91 95595 83981",
     whatsapp: "919559583981",
-    whatsappMessage: "Hi, I'm interested in the Library Management System. I'd like to see a demo for my library."
+    whatsappMessage: "Hi, I'm interested in the LibryOS Library Management System. I'd like to see a demo for my library."
   },
   links: {
     demo: "#demo",
@@ -98,3 +101,15 @@ export const siteConfig = {
     }
   ]
 };
+
+export function getAppBaseUrl() {
+  if (typeof window !== 'undefined') {
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    if (isLocal) {
+      const currentPort = window.location.port;
+      const targetPort = currentPort === '5173' ? '5174' : (currentPort === '5174' ? '5173' : '5174');
+      return `http://${window.location.hostname}:${targetPort}`;
+    }
+  }
+  return import.meta.env.VITE_APP_URL || siteConfig.appUrl || 'https://library-system-mu-eight.vercel.app';
+}

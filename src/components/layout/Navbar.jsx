@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { siteConfig } from '../../config/site';
+import { siteConfig, getAppBaseUrl } from '../../config/site';
 import { Menu, X } from 'lucide-react';
 
 export default function Navbar() {
@@ -25,7 +25,7 @@ export default function Navbar() {
   return (
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white/80 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'
+        isScrolled ? 'bg-white/85 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -38,7 +38,7 @@ export default function Navbar() {
               </svg>
             </div>
             <span className="font-extrabold text-2xl text-slate-900 tracking-tight">
-              Study<span className="text-brand-600">Desk</span>
+              Libry<span className="text-brand-600">OS</span>
             </span>
           </a>
 
@@ -55,13 +55,19 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* CTA */}
+          {/* CTA & Login */}
           <div className="hidden md:flex items-center gap-4">
+            <a 
+              href={`${getAppBaseUrl()}/?role=owner`}
+              className="text-sm font-bold text-slate-700 hover:text-brand-600 transition-colors px-3 py-2"
+            >
+              Owner Login
+            </a>
             <a 
               href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(siteConfig.contact.whatsappMessage)}`}
               target="_blank"
               rel="noreferrer"
-              className="px-5 py-2.5 text-sm font-medium text-white bg-brand-600 rounded-lg hover:bg-brand-700 transition-colors shadow-sm shadow-brand-600/20"
+              className="px-5 py-2.5 text-sm font-bold text-white bg-brand-600 rounded-xl hover:bg-brand-700 transition-colors shadow-sm shadow-brand-600/20"
             >
               Book a Demo
             </a>
@@ -81,22 +87,28 @@ export default function Navbar() {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-xl border-t border-slate-100 p-4 flex flex-col gap-4">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-xl border-t border-slate-100 p-4 flex flex-col gap-3">
           {navLinks.map((link) => (
             <a 
               key={link.name} 
               href={link.href}
               onClick={() => setMobileMenuOpen(false)}
-              className="block px-4 py-3 text-base font-medium text-slate-700 hover:bg-slate-50 hover:text-brand-600 rounded-lg"
+              className="block px-4 py-2.5 text-base font-medium text-slate-700 hover:bg-slate-50 hover:text-brand-600 rounded-lg"
             >
               {link.name}
             </a>
           ))}
           <a 
+            href={`${getAppBaseUrl()}/?role=owner`}
+            className="block px-4 py-2.5 text-base font-bold text-brand-600 hover:bg-brand-50 rounded-lg"
+          >
+            🔐 Owner Login
+          </a>
+          <a 
             href={`https://wa.me/${siteConfig.contact.whatsapp}?text=${encodeURIComponent(siteConfig.contact.whatsappMessage)}`}
             target="_blank"
             rel="noreferrer"
-            className="block w-full text-center mt-2 px-5 py-3 text-base font-medium text-white bg-brand-600 rounded-lg hover:bg-brand-700"
+            className="block w-full text-center mt-1 px-5 py-3 text-base font-bold text-white bg-brand-600 rounded-xl hover:bg-brand-700"
           >
             Book a Demo
           </a>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, ArrowRight, Library, Users, CreditCard, MonitorSmartphone, TrendingUp, BarChart3, Clock, Sparkles, ChevronDown, X, Building2, User, Mail, Lock, CheckCircle2, ShieldCheck, Zap } from 'lucide-react';
-import { siteConfig } from '../config/site';
+import { siteConfig, getAppBaseUrl } from '../config/site';
 import { productAssets } from '../config/productAssets';
 import PlaceholderScreenshot from '../components/ui/PlaceholderScreenshot';
 
@@ -378,17 +378,12 @@ export default function Home() {
 
     setFormError('');
     setRegistrationSuccess(true);
-    const currentPort = window.location.port;
-    const targetPort = currentPort === '5173' ? '5174' : (currentPort === '5174' ? '5173' : currentPort);
-    const baseUrl = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
-      ? `http://${window.location.hostname}:${targetPort}`
-      : 'https://library-desk.vercel.app';
-
+    const baseUrl = getAppBaseUrl();
     const appUrl = `${baseUrl}/?onboarding=true&libraryName=${encodeURIComponent(formData.libraryName)}&ownerName=${encodeURIComponent(formData.fullName)}&email=${encodeURIComponent(formData.email)}&slug=${encodeURIComponent(formData.slug)}&plan=${encodeURIComponent(selectedPlan)}`;
 
     setTimeout(() => {
       window.location.href = appUrl;
-    }, 1200);
+    }, 2500);
   };
   
   const trustItems = ['Student Management', 'Live Attendance', 'Seat Management', 'Fee Tracking', 'Student Portal', 'Library Growth', 'Revenue Analytics'];
@@ -1490,7 +1485,7 @@ export default function Home() {
                     <div>
                       <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Your Library Public Web Link</label>
                       <div className="bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 flex items-center gap-1 text-sm text-slate-500">
-                        <span className="text-slate-400 text-xs font-bold">library-desk.vercel.app/l/</span>
+                        <span className="text-slate-400 text-xs font-bold">{getAppBaseUrl().replace(/^https?:\/\//, "").replace(/\/$/, "")}/l/</span>
                         <input 
                           type="text"
                           required
@@ -1552,19 +1547,21 @@ export default function Home() {
                     We have created the trial environment for <span className="font-bold text-slate-900">{formData.libraryName || 'Your Library'}</span> under the <span className="text-brand-600 font-bold">{selectedPlan}</span>.
                   </p>
 
-                  <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl mb-6 text-left">
-                    <div className="text-xs text-slate-500 font-bold mb-1">Your Custom Library URL:</div>
+                  <div className="bg-slate-50 border border-slate-200 p-4 rounded-2xl mb-5 text-left">
+                    <div className="text-xs text-slate-500 font-bold mb-1">Your Custom Library Public URL:</div>
                     <div className="text-brand-600 font-black text-sm select-all break-all">
-                      https://library-desk.vercel.app/l/{formData.slug || 'mylibrary'}
+                      {getAppBaseUrl().replace(/\/$/, '')}/l/{formData.slug || 'mylibrary'}
                     </div>
+                    <p className="text-[11px] text-slate-400 mt-1 font-medium">Students can use this link to check live seats and apply for admission.</p>
                   </div>
 
                   <a 
-                    href={`${(window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') ? `http://${window.location.hostname}:${window.location.port === '5173' ? '5174' : '5173'}` : 'https://library-desk.vercel.app'}/?onboarding=true&libraryName=${encodeURIComponent(formData.libraryName)}&ownerName=${encodeURIComponent(formData.fullName)}&email=${encodeURIComponent(formData.email)}&slug=${encodeURIComponent(formData.slug)}&plan=${encodeURIComponent(selectedPlan)}`}
-                    className="block w-full py-3.5 rounded-xl font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-600/20 transition-all text-center mb-3 cursor-pointer"
+                    href={`${getAppBaseUrl()}/?onboarding=true&libraryName=${encodeURIComponent(formData.libraryName)}&ownerName=${encodeURIComponent(formData.fullName)}&email=${encodeURIComponent(formData.email)}&slug=${encodeURIComponent(formData.slug)}&plan=${encodeURIComponent(selectedPlan)}`}
+                    className="block w-full py-3.5 rounded-xl font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-lg shadow-brand-600/20 transition-all text-center mb-2 cursor-pointer"
                   >
                     🚀 Open Dashboard & Setup Library →
                   </a>
+                  <p className="text-xs text-slate-400 mb-3 font-medium">Opening LibryOS Setup in a moment...</p>
 
                   <button 
                     onClick={() => setIsRegistrationOpen(false)}
