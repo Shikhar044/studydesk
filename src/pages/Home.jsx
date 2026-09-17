@@ -342,8 +342,8 @@ export default function Home() {
     email: '',
     libraryName: '',
     slug: '',
-    password: '',
-    confirmPassword: ''
+    pin: '',
+    confirmPin: ''
   });
 
   const [formError, setFormError] = useState('');
@@ -367,19 +367,26 @@ export default function Home() {
 
   const handleRegisterSubmit = (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      setFormError('Passwords do not match. Please enter matching passwords.');
+    const cleanPin = (formData.pin || '').trim();
+    const cleanConfirm = (formData.confirmPin || '').trim();
+
+    if (!cleanPin) {
+      setFormError('Please create a 4-digit Owner Access PIN.');
       return;
     }
-    if (formData.password.length < 4) {
-      setFormError('Password must be at least 4 characters long.');
+    if (!/^\d{4}$/.test(cleanPin)) {
+      setFormError('Owner PIN must be exactly 4 numeric digits (e.g. 1234).');
+      return;
+    }
+    if (cleanPin !== cleanConfirm) {
+      setFormError('PINs do not match. Please re-enter matching 4-digit PINs.');
       return;
     }
 
     setFormError('');
     setRegistrationSuccess(true);
     const baseUrl = getAppBaseUrl();
-    const appUrl = `${baseUrl}/?onboarding=true&libraryName=${encodeURIComponent(formData.libraryName)}&ownerName=${encodeURIComponent(formData.fullName)}&email=${encodeURIComponent(formData.email)}&slug=${encodeURIComponent(formData.slug)}&plan=${encodeURIComponent(selectedPlan)}`;
+    const appUrl = `${baseUrl}/?onboarding=true&libraryName=${encodeURIComponent(formData.libraryName)}&ownerName=${encodeURIComponent(formData.fullName)}&email=${encodeURIComponent(formData.email)}&slug=${encodeURIComponent(formData.slug)}&plan=${encodeURIComponent(selectedPlan)}&pin=${encodeURIComponent(cleanPin)}`;
 
     setTimeout(() => {
       window.location.href = appUrl;
@@ -1499,35 +1506,42 @@ export default function Home() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
-                        <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Password</label>
+                        <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Create 4-Digit PIN</label>
                         <div className="relative">
                           <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                           <input 
                             type="password"
                             required
-                            placeholder="••••••••"
-                            value={formData.password}
-                            onChange={(e) => setFormData({...formData, password: e.target.value})}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 font-medium"
+                            maxLength={4}
+                            pattern="[0-9]{4}"
+                            placeholder="••••"
+                            value={formData.pin}
+                            onChange={(e) => setFormData({...formData, pin: e.target.value.replace(/\D/g, '')})}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 font-bold tracking-widest"
                           />
                         </div>
                       </div>
 
                       <div>
-                        <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Confirm Password</label>
+                        <label className="block text-xs font-extrabold text-slate-700 uppercase tracking-wider mb-1">Confirm 4-Digit PIN</label>
                         <div className="relative">
                           <Lock size={18} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
                           <input 
                             type="password"
                             required
-                            placeholder="••••••••"
-                            value={formData.confirmPassword}
-                            onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 font-medium"
+                            maxLength={4}
+                            pattern="[0-9]{4}"
+                            placeholder="••••"
+                            value={formData.confirmPin}
+                            onChange={(e) => setFormData({...formData, confirmPin: e.target.value.replace(/\D/g, '')})}
+                            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-brand-500 font-bold tracking-widest"
                           />
                         </div>
                       </div>
                     </div>
+                    <p className="text-[11px] text-slate-500 -mt-1">
+                      🔒 This 4-digit PIN is your secret login credential for your LibryOS Owner Dashboard.
+                    </p>
 
                     <button
                       type="submit"
