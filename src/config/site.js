@@ -3,7 +3,7 @@ export const siteConfig = {
   brandName: "LibryOS",
   tagline: "The Operating System for Modern Study Libraries",
   description: "Everything your study library needs, in one place. Automated seat management, live attendance, and fee tracking.",
-  appUrl: import.meta.env.VITE_APP_URL || "https://library-system-mu-eight.vercel.app",
+  appUrl: import.meta.env.VITE_APP_URL || "https://app.libryos.co.in",
   contact: {
     email: "supportlibrarysaas@gmail.com",
     phone: "+91 95595 83981",
@@ -111,5 +111,5 @@ export function getAppBaseUrl() {
       return `http://${window.location.hostname}:${targetPort}`;
     }
   }
-  return import.meta.env.VITE_APP_URL || siteConfig.appUrl || 'https://library-system-mu-eight.vercel.app';
+  return import.meta.env.VITE_APP_URL || siteConfig.appUrl || 'https://app.libryos.co.in';
 }
