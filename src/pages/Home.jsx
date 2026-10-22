@@ -219,7 +219,7 @@ const InteractiveSeatMapSimulator = () => {
           )}
 
           <div className="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400 font-semibold flex items-center justify-between">
-            <span>⚡ StudyDesk Live Engine</span>
+            <span>⚡ LibryOS Live Engine</span>
             <span className="text-emerald-400 font-bold">100% Sync</span>
           </div>
         </div>
@@ -538,7 +538,7 @@ export default function Home() {
               Interactive Comparison
             </span>
             <h2 className="text-3xl md:text-5xl font-bold text-slate-900 mb-6">Still managing your library like this?</h2>
-            <p className="text-lg text-slate-600 mb-8">Hover over any card below — or flip the switch to see how StudyDesk fixes it instantly.</p>
+            <p className="text-lg text-slate-600 mb-8">Hover over any card below — or flip the switch to see how LibryOS fixes it instantly.</p>
             
             {/* Interactive Toggle Switch */}
             <div className="inline-flex items-center gap-3 bg-slate-100 p-2 rounded-2xl border border-slate-200 shadow-inner">
@@ -560,7 +560,7 @@ export default function Home() {
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
-                <Sparkles size={16} /> The StudyDesk Way
+                <Sparkles size={16} /> The LibryOS Way
               </button>
             </div>
           </motion.div>
@@ -605,7 +605,7 @@ export default function Home() {
                     
                     <div>
                       <span className={`text-xs font-extrabold tracking-wider uppercase mb-1 block ${isSolved ? 'text-emerald-700' : 'text-rose-500'}`}>
-                        {isSolved ? '✨ StudyDesk Solution' : 'Pain Point'}
+                        {isSolved ? '✨ LibryOS Solution' : 'Pain Point'}
                       </span>
                       <p className={`font-bold text-base transition-colors ${isSolved ? 'text-slate-900' : 'text-slate-700'}`}>
                         {isSolved ? item.solution : item.problem}
@@ -1160,12 +1160,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 10. STUDYDESK BUSINESS IMPACT & ROI COMPARISON */}
+      {/* 10. LIBRYOS BUSINESS IMPACT & ROI COMPARISON */}
       <section className="py-24 bg-gradient-to-b from-slate-50 via-blue-50/30 to-slate-50 relative overflow-hidden border-y border-slate-200/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <SectionHeading 
             title="Designed Specially for Modern Study Libraries" 
-            subtitle="See how StudyDesk eliminates manual workload, prevents fee leakage, and builds your local library brand."
+            subtitle="See how LibryOS eliminates manual workload, prevents fee leakage, and builds your local library brand."
           />
 
           {/* ROI Metric Cards Grid */}
@@ -1194,7 +1194,7 @@ export default function Home() {
               <div className="text-3xl font-black text-slate-900 mb-1">Public Library Webpage</div>
               <div className="text-xs font-bold uppercase tracking-wider text-brand-600 mb-3">2x New Student Admissions</div>
               <p className="text-slate-600 text-xs leading-relaxed">
-                Get a dedicated web address (`studydesk.in/l/your-name`) to showcase your seats, shifts & pricing online.
+                Get a dedicated web address (`libryos.co.in/l/your-name`) to showcase your seats, shifts & pricing online.
               </p>
             </motion.div>
 
@@ -1222,7 +1222,7 @@ export default function Home() {
               <div className="col-span-5 md:col-span-4">Feature & Capabilities</div>
               <div className="col-span-3 md:col-span-3 text-slate-400">Old Paper Registers</div>
               <div className="col-span-4 md:col-span-5 text-brand-400 flex items-center gap-1.5 font-black">
-                <Sparkles size={16} /> StudyDesk Platform
+                <Sparkles size={16} /> LibryOS Platform
               </div>
             </div>
 
@@ -1230,7 +1230,7 @@ export default function Home() {
               { factor: 'Reception & Entry Check-in', old: 'Manual paper logs & human errors', new: 'Self-Service 4-Digit Terminal PIN' },
               { factor: 'Live Seat Management', old: 'Guesswork & double-booking risk', new: 'Interactive Visual Seat Occupancy Map' },
               { factor: 'Fee Due Reminders', old: 'Manual uncomfortable phone calls', new: 'Automated Email & 1-Click WhatsApp' },
-              { factor: 'Public Web Address for Business', old: 'None (Zero online visibility)', new: 'Branded Library Webpage (studydesk.in/l/slug)' },
+              { factor: 'Public Web Address for Business', old: 'None (Zero online visibility)', new: 'Branded Library Webpage (libryos.co.in/l/slug)' },
               { factor: 'Student & Parent Transparency', old: 'Frequent calls & lost receipts', new: 'Dedicated 24/7 Digital Student Portal' },
               { factor: 'Multi-Branch Management', old: 'Requires physical visits to each branch', new: '1-Click Centralized Multi-Branch Control' },
             ].map((row, idx) => (

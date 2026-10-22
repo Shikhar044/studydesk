@@ -15,7 +15,7 @@ export default function Footer() {
                 </svg>
               </div>
               <span className="font-extrabold text-2xl text-white tracking-tight">
-                Study<span className="text-brand-400">Desk</span>
+                Libry<span className="text-brand-400">OS</span>
               </span>
             </a>
             <p className="text-sm text-slate-400 mb-6 max-w-xs">
